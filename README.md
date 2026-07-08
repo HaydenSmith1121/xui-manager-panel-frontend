@@ -113,11 +113,11 @@ export BACKEND_UPSTREAM=http://127.0.0.1:25889
 bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-panel-frontend/main/deploy/upgrade.sh)
 ~~~
 
-升级脚本会拉取最新代码、重写 `config.js`、校验并重载 Nginx。
+升级脚本会拉取最新代码、重写 `config.js`、校验并重载 Nginx。重新安装或升级已有站点时，如果没有显式传入 `FRONTEND_LISTEN_PORT`、`FRONTEND_SERVER_NAME`、`BACKEND_UPSTREAM` 或 `ENABLE_BACKEND_PROXY`，脚本会优先复用现有 Nginx 配置里的 `listen`、`server_name` 和 `proxy_pass`，避免把线上非 80 端口误改回默认值。
 
 ### 现有服务器推荐升级命令
 
-如果后端服务监听 `127.0.0.1:25889`，前端 Nginx 对外监听 `25888`，每次升级前端都建议显式传入端口，避免脚本默认值或历史环境变量把 `/api/` 代理到错误端口。
+如果后端服务监听 `127.0.0.1:25889`，前端 Nginx 对外监听 `25888`，升级脚本现在会尽量自动复用现有端口；生产环境仍建议显式传入端口和 upstream，让操作记录更清楚，也避免首次部署或配置文件缺失时回退到默认 `80`。
 
 ~~~bash
 export FRONTEND_LISTEN_PORT=25888

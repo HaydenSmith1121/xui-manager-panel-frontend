@@ -5,12 +5,89 @@ APP_NAME="xui-manager-panel-frontend"
 APP_DIR="${APP_DIR:-/var/www/xui-manager-panel-frontend}"
 BRANCH="${BRANCH:-main}"
 API_BASE_URL="${API_BASE_URL:-}"
-ENABLE_BACKEND_PROXY="${ENABLE_BACKEND_PROXY:-1}"
-BACKEND_UPSTREAM="${BACKEND_UPSTREAM:-http://127.0.0.1:25889}"
-FRONTEND_SERVER_NAME="${FRONTEND_SERVER_NAME:-_}"
-FRONTEND_LISTEN_PORT="${FRONTEND_LISTEN_PORT:-80}"
 NGINX_CONF="${NGINX_CONF:-/etc/nginx/sites-available/${APP_NAME}.conf}"
 NGINX_LINK="${NGINX_LINK:-/etc/nginx/sites-enabled/${APP_NAME}.conf}"
+
+detect_nginx_listen_port() {
+  [ -f "$1" ] || return 1
+  awk '
+    $1 == "listen" {
+      value = $2
+      gsub(/;/, "", value)
+      sub(/.*:/, "", value)
+      if (value ~ /^[0-9]+$/) {
+        print value
+        exit
+      }
+    }
+  ' "$1"
+}
+
+detect_nginx_server_name() {
+  [ -f "$1" ] || return 1
+  awk '
+    $1 == "server_name" {
+      for (i = 2; i <= NF; i++) {
+        gsub(/;/, "", $i)
+        if ($i != "") {
+          print $i
+          exit
+        }
+      }
+    }
+  ' "$1"
+}
+
+detect_nginx_backend_upstream() {
+  [ -f "$1" ] || return 1
+  awk '
+    $1 == "proxy_pass" {
+      value = $2
+      gsub(/;/, "", value)
+      print value
+      exit
+    }
+  ' "$1"
+}
+
+nginx_config_has_backend_proxy() {
+  [ -f "$1" ] && grep -Eq '^[[:space:]]*proxy_pass[[:space:]]+' "$1"
+}
+
+if [ -z "${FRONTEND_SERVER_NAME+x}" ]; then
+  EXISTING_FRONTEND_SERVER_NAME="$(detect_nginx_server_name "$NGINX_CONF" || true)"
+  FRONTEND_SERVER_NAME="${EXISTING_FRONTEND_SERVER_NAME:-_}"
+else
+  FRONTEND_SERVER_NAME="${FRONTEND_SERVER_NAME:-_}"
+fi
+
+if [ -z "${FRONTEND_LISTEN_PORT+x}" ]; then
+  EXISTING_FRONTEND_LISTEN_PORT="$(detect_nginx_listen_port "$NGINX_CONF" || true)"
+  FRONTEND_LISTEN_PORT="${EXISTING_FRONTEND_LISTEN_PORT:-80}"
+else
+  FRONTEND_LISTEN_PORT="${FRONTEND_LISTEN_PORT:-80}"
+fi
+
+if [ -z "${BACKEND_UPSTREAM+x}" ]; then
+  EXISTING_BACKEND_UPSTREAM="$(detect_nginx_backend_upstream "$NGINX_CONF" || true)"
+  BACKEND_UPSTREAM="${EXISTING_BACKEND_UPSTREAM:-http://127.0.0.1:25889}"
+else
+  BACKEND_UPSTREAM="${BACKEND_UPSTREAM:-http://127.0.0.1:25889}"
+fi
+
+if [ -z "${ENABLE_BACKEND_PROXY+x}" ]; then
+  if [ -f "$NGINX_CONF" ]; then
+    if nginx_config_has_backend_proxy "$NGINX_CONF"; then
+      ENABLE_BACKEND_PROXY=1
+    else
+      ENABLE_BACKEND_PROXY=0
+    fi
+  else
+    ENABLE_BACKEND_PROXY=1
+  fi
+else
+  ENABLE_BACKEND_PROXY="${ENABLE_BACKEND_PROXY:-1}"
+fi
 
 if [ "$(id -u)" -ne 0 ]; then
   echo "Please run this upgrade as root."
@@ -88,3 +165,15 @@ nginx -t
 systemctl reload nginx
 
 echo "Upgraded ${APP_NAME}."
+echo "Frontend: http://SERVER_IP:${FRONTEND_LISTEN_PORT}/"
+echo "Nginx server_name: ${FRONTEND_SERVER_NAME}"
+if [ -n "$API_BASE_URL" ]; then
+  echo "API base: ${API_BASE_URL}"
+else
+  echo "API base: same-origin"
+fi
+if [ "$ENABLE_BACKEND_PROXY" = "1" ]; then
+  echo "Backend proxy: /api and /sub -> ${BACKEND_UPSTREAM}"
+else
+  echo "Backend proxy: disabled"
+fi
