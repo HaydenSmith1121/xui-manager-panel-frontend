@@ -18,7 +18,7 @@ xui-manager-panel 的独立前端仓库，提供静态页面、运行时 API 地
 export ADMIN_EMAIL=admin@admin.com
 export ADMIN_PASSWORD=请改成强密码
 export LISTEN_HOST=127.0.0.1
-export LISTEN_PORT=25888
+export LISTEN_PORT=25889
 bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-panel-backend/main/deploy/install.sh)
 ~~~
 
@@ -27,7 +27,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-
 ~~~bash
 export FRONTEND_SERVER_NAME=_
 export FRONTEND_LISTEN_PORT=80
-export BACKEND_UPSTREAM=http://127.0.0.1:25888
+export BACKEND_UPSTREAM=http://127.0.0.1:25889
 export ENABLE_BACKEND_PROXY=1
 export API_BASE_URL=
 bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-panel-frontend/main/deploy/install.sh)
@@ -47,7 +47,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-
 export ADMIN_EMAIL=admin@admin.com
 export ADMIN_PASSWORD=请改成强密码
 export LISTEN_HOST=0.0.0.0
-export LISTEN_PORT=25888
+export LISTEN_PORT=25889
 export FRONTEND_ORIGIN=https://front.example.com
 export SESSION_COOKIE_SAMESITE=None
 export SESSION_COOKIE_SECURE=true
@@ -100,7 +100,7 @@ window.XUI_MANAGER_API_BASE_URL = "";
 | `FRONTEND_LISTEN_PORT` | `80` | Nginx 监听端口 |
 | `API_BASE_URL` | 空 | 写入 `config.js` 的后端地址；空表示同源请求 |
 | `ENABLE_BACKEND_PROXY` | `1` | 是否由 Nginx 代理 `/api/` 和 `/sub/` |
-| `BACKEND_UPSTREAM` | `http://127.0.0.1:25888` | 后端上游地址 |
+| `BACKEND_UPSTREAM` | `http://127.0.0.1:25889` | 后端上游地址 |
 | `NGINX_CONF` | `/etc/nginx/sites-available/xui-manager-panel-frontend.conf` | Nginx 配置文件路径 |
 | `NGINX_LINK` | `/etc/nginx/sites-enabled/xui-manager-panel-frontend.conf` | Nginx enabled 链接路径 |
 
@@ -109,7 +109,7 @@ window.XUI_MANAGER_API_BASE_URL = "";
 ~~~bash
 export API_BASE_URL=
 export ENABLE_BACKEND_PROXY=1
-export BACKEND_UPSTREAM=http://127.0.0.1:25888
+export BACKEND_UPSTREAM=http://127.0.0.1:25889
 bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-panel-frontend/main/deploy/upgrade.sh)
 ~~~
 
