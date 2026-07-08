@@ -14189,3 +14189,19 @@ html[data-theme="dark"] body.is-guest .guest-final-cta .guest-auth-actions butto
     color: #67e8f9 !important;
   }
 }
+
+/* Mobile guest header: keep login action compact */
+@media (max-width: 760px) {
+  body.is-guest .guest-topbar > .guest-auth-actions button {
+    min-width: 88px !important;
+    max-width: 94px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 10px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    font-weight: 850 !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+  }
+}

@@ -74,6 +74,15 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("font-size: 0 !important", app_css)
         self.assertIn('html[data-theme="dark"] body.is-guest .flow-step-arrow::before', app_css)
 
+    def test_mobile_guest_header_auth_button_stays_compact(self):
+        app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Mobile guest header: keep login action compact", app_css)
+        self.assertIn("body.is-guest .guest-topbar > .guest-auth-actions button", app_css)
+        self.assertIn("max-width: 94px !important", app_css)
+        self.assertIn("height: 34px !important", app_css)
+        self.assertIn("font-size: 12px !important", app_css)
+
     def test_public_storefront_and_authentication_are_separate(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")
