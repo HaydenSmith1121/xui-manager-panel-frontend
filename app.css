@@ -13759,3 +13759,127 @@ body.is-guest #guestFlow {
     display: none !important;
   }
 }
+
+/* Ticket help viewport fit: keep the workspace compact and scroll inside panels. */
+body.is-authed #ticketsView.tickets-workspace {
+  min-height: 100svh !important;
+  padding-top: clamp(18px, 2.4vw, 30px) !important;
+  padding-bottom: clamp(18px, 2.4vw, 30px) !important;
+  box-sizing: border-box !important;
+}
+
+body.is-authed #ticketsView .page-heading {
+  margin-bottom: clamp(14px, 2vw, 20px) !important;
+}
+
+body.is-authed #ticketsView .page-heading .eyebrow {
+  margin-bottom: 6px !important;
+}
+
+body.is-authed #ticketsView .page-heading h1 {
+  font-size: clamp(28px, 3vw, 38px) !important;
+  line-height: 1.05 !important;
+}
+
+body.is-authed #ticketsView .tickets-layout,
+body.is-authed .tickets-workspace .tickets-layout {
+  gap: clamp(14px, 2vw, 20px) !important;
+  max-width: min(1040px, 100%) !important;
+}
+
+body.is-authed #ticketsView .tickets-layout > .panel,
+body.is-authed #ticketsView .tickets-layout > form.panel {
+  padding: clamp(16px, 2.2vw, 24px) !important;
+}
+
+body.is-authed #ticketForm {
+  padding: clamp(16px, 2.2vw, 24px) !important;
+}
+
+body.is-authed #ticketForm .form-intro {
+  margin-bottom: 14px !important;
+}
+
+body.is-authed #ticketForm label {
+  gap: 7px !important;
+  margin: 0 0 14px !important;
+}
+
+body.is-authed #ticketForm input {
+  height: 42px !important;
+}
+
+body.is-authed #ticketForm textarea {
+  min-height: 104px !important;
+  max-height: 128px !important;
+}
+
+body.is-authed #ticketForm button[type="submit"] {
+  min-height: 42px !important;
+  margin-top: 0 !important;
+}
+
+body.is-authed #ticketsView .ticket-list-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  max-height: min(46svh, 420px) !important;
+}
+
+body.is-authed #ticketsView .ticket-list-panel .form-intro {
+  flex: 0 0 auto !important;
+  margin-bottom: 12px !important;
+}
+
+body.is-authed #ticketsView .ticket-list {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+  padding-right: 2px !important;
+}
+
+body.is-authed #ticketsView .ticket-card {
+  gap: 8px !important;
+  padding: 12px !important;
+}
+
+body.is-authed #ticketsView .ticket-card p,
+body.is-authed #ticketsView .ticket-reply p {
+  margin: 0 !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-chat {
+  min-height: 0 !important;
+  height: min(68svh, 560px) !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-chat-header {
+  padding: 12px 16px !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-messages {
+  gap: 10px !important;
+  padding: 16px !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-composer {
+  padding: 12px 16px !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-composer textarea {
+  min-height: 72px !important;
+  max-height: 92px !important;
+}
+
+@media (max-width: 900px) {
+  body.is-authed #ticketsView.tickets-workspace {
+    min-height: auto !important;
+    padding-bottom: 42px !important;
+  }
+
+  body.is-authed #ticketsView .ticket-list-panel,
+  body.is-authed #ticketsView .admin-ticket-chat {
+    max-height: none !important;
+    height: auto !important;
+  }
+}

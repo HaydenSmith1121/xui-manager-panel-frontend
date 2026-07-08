@@ -435,6 +435,18 @@ class FrontendTests(unittest.TestCase):
         self.assertIn(".admin-ticket-conversation", app_css)
         self.assertIn(".admin-ticket-bubble", app_css)
 
+    def test_ticket_help_page_keeps_scroll_inside_panels(self):
+        root = Path(__file__).resolve().parents[0]
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Ticket help viewport fit", app_css)
+        self.assertIn("body.is-authed #ticketsView.tickets-workspace", app_css)
+        self.assertIn("padding-top: clamp(18px, 2.4vw, 30px)", app_css)
+        self.assertIn("max-height: min(46svh, 420px)", app_css)
+        self.assertIn("overflow: auto !important", app_css)
+        self.assertIn("height: min(68svh, 560px)", app_css)
+        self.assertIn("min-height: 104px", app_css)
+
     def test_node_status_menu_switch_does_not_shift_page_sideways(self):
         root = Path(__file__).resolve().parents[0]
         app_css = (root / "app.css").read_text(encoding="utf-8")
