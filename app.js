@@ -1510,7 +1510,10 @@ async function handleDocumentClick(event) {
       renderAuth();
       showNotice("签到成功，获得 " + formatBytes(data.reward_bytes) + " 流量");
     } finally {
-      buttons.forEach((item) => item.classList.remove("is-loading"));
+      buttons.forEach((item) => {
+        item.classList.remove("is-loading");
+        item.style.cursor = "";
+      });
       renderCheckin();
     }
     return;

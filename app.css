@@ -73,7 +73,7 @@ textarea:focus-visible {
 }
 
 button:disabled {
-  cursor: wait;
+  cursor: not-allowed;
   opacity: 0.58;
   transform: none;
 }
@@ -13179,6 +13179,74 @@ body.is-authed #profileView .profile-action-cluster {
   align-self: center !important;
   justify-self: end !important;
   margin: 0 !important;
+}
+
+/* Account header action alignment: keep notification, avatar upload, and logout on one baseline. */
+body.is-authed #profileView .profile-action-cluster {
+  min-height: 44px !important;
+  align-items: center !important;
+}
+
+body.is-authed #profileView .profile-notification-menu,
+body.is-authed #profileView .avatar-upload-button,
+body.is-authed #profileView #logoutBtn {
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+body.is-authed #profileView .profile-notification-menu {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+body.is-authed #profileView .profile-notification-menu > summary,
+body.is-authed #profileView .avatar-upload-button,
+body.is-authed #profileView #logoutBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  transform: none !important;
+}
+
+body.is-authed #profileView .profile-notification-menu > summary {
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+}
+
+body.is-authed #profileView .avatar-upload-button,
+body.is-authed #profileView #logoutBtn {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Check-in should never leave a spinning/wait cursor after background refreshes. */
+body.is-authed [data-checkin],
+body.is-authed [data-checkin]:hover,
+body.is-authed [data-checkin]:focus-visible,
+body.is-authed .checkin-icon-action,
+body.is-authed .checkin-icon-action:hover,
+body.is-authed .checkin-icon-action:focus-visible {
+  cursor: pointer !important;
+}
+
+body.is-authed [data-checkin][disabled],
+body.is-authed [data-checkin][aria-disabled="true"],
+body.is-authed .checkin-icon-action[disabled],
+body.is-authed .checkin-icon-action[aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
+
+body.is-authed [data-checkin].is-loading,
+body.is-authed .checkin-icon-action.is-loading {
+  cursor: pointer !important;
 }
 
 body.is-authed #profileView .profile-info-panel {
