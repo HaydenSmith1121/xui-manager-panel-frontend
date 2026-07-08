@@ -17,6 +17,241 @@
   --shadow: 0 20px 60px rgba(30, 81, 150, 0.1);
 }
 
+body.is-authed #rechargeCardsView .recharge-card-layout {
+  align-items: stretch !important;
+  grid-template-columns: minmax(340px, 0.78fr) minmax(0, 1.22fr) !important;
+}
+
+body.is-authed #rechargeCardsView .recharge-admin-panel,
+body.is-authed #rechargeCardsView .recharge-card-list-panel {
+  box-sizing: border-box !important;
+  height: 100% !important;
+  min-height: clamp(390px, 48vh, 520px) !important;
+}
+
+body.is-authed #rechargeCardsView .recharge-card-list-panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.is-authed #rechargeCardsView #rechargeCardList {
+  flex: 1 1 auto !important;
+  overflow: auto !important;
+}
+
+.config-module-card:hover,
+.config-module-card:focus-visible {
+  background: linear-gradient(145deg, rgba(239, 246, 255, 0.98), rgba(248, 250, 252, 0.96)) !important;
+  border-color: rgba(96, 165, 250, 0.34) !important;
+  box-shadow: 0 18px 42px rgba(96, 165, 250, 0.13) !important;
+  color: #0f172a !important;
+}
+
+.config-module-card:hover small,
+.config-module-card:focus-visible small {
+  color: #4b6b92 !important;
+}
+
+body.is-authed #adminTicketList.ticket-list {
+  display: block !important;
+}
+
+.admin-ticket-chat {
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.98), rgba(239, 246, 255, 0.76));
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.08);
+  display: grid;
+  grid-template-columns: minmax(260px, 0.38fr) minmax(0, 1fr);
+  min-height: 620px;
+  overflow: hidden;
+}
+
+.admin-ticket-thread {
+  background: rgba(255, 255, 255, 0.72);
+  border-right: 1px solid rgba(148, 163, 184, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 720px;
+  overflow: auto;
+  padding: 16px;
+}
+
+.admin-ticket-person {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 18px;
+  color: #0f172a;
+  cursor: pointer;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  padding: 12px;
+  text-align: left;
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.admin-ticket-person:hover,
+.admin-ticket-person:focus-visible,
+.admin-ticket-person.active {
+  background: rgba(239, 246, 255, 0.98);
+  border-color: rgba(96, 165, 250, 0.42);
+  box-shadow: 0 14px 34px rgba(96, 165, 250, 0.14);
+  transform: translateY(-1px);
+}
+
+.admin-ticket-avatar {
+  align-items: center;
+  background: linear-gradient(145deg, #bfdbfe, #dbeafe);
+  border-radius: 50%;
+  color: #1d4ed8;
+  display: inline-flex;
+  font-weight: 800;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.admin-ticket-person-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-ticket-person-main strong,
+.admin-ticket-person-main small,
+.admin-ticket-person-main em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-ticket-person-main small {
+  color: #475569;
+  font-size: 12px;
+}
+
+.admin-ticket-person-main em {
+  color: #64748b;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.admin-ticket-conversation {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 620px;
+}
+
+.admin-ticket-chat-header {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+}
+
+.admin-ticket-chat-header p {
+  color: #64748b;
+  margin: 4px 0 0;
+}
+
+.admin-ticket-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: auto;
+  padding: 22px;
+}
+
+.admin-ticket-bubble {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 20px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+  max-width: min(72%, 620px);
+  padding: 12px 14px;
+}
+
+.admin-ticket-bubble.user {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom-left-radius: 8px;
+  color: #0f172a;
+}
+
+.admin-ticket-bubble.admin {
+  align-self: flex-end;
+  background: linear-gradient(145deg, #60a5fa, #3b82f6);
+  border-color: rgba(59, 130, 246, 0.28);
+  border-bottom-right-radius: 8px;
+  color: #ffffff;
+}
+
+.admin-ticket-bubble p {
+  line-height: 1.65;
+  margin: 6px 0 8px;
+  white-space: pre-wrap;
+}
+
+.admin-ticket-bubble small {
+  color: inherit;
+  opacity: 0.72;
+}
+
+.admin-ticket-composer {
+  align-items: end !important;
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  display: grid !important;
+  gap: 12px !important;
+  grid-template-columns: minmax(0, 1fr) 180px auto !important;
+  margin: 0 !important;
+  padding: 16px 18px !important;
+}
+
+.admin-ticket-composer textarea {
+  min-height: 86px;
+  resize: vertical;
+}
+
+@media (max-width: 900px) {
+  body.is-authed #rechargeCardsView .recharge-card-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.is-authed #rechargeCardsView .recharge-admin-panel,
+  body.is-authed #rechargeCardsView .recharge-card-list-panel {
+    min-height: auto !important;
+  }
+
+  .admin-ticket-chat {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .admin-ticket-thread {
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+    max-height: 320px;
+  }
+
+  .admin-ticket-conversation {
+    min-height: 520px;
+  }
+
+  .admin-ticket-composer {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-ticket-bubble {
+    max-width: 92%;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

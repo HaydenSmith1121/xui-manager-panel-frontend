@@ -394,6 +394,29 @@ class FrontendTests(unittest.TestCase):
         self.assertIn(".checkin-icon-action.is-loading::after", app_css)
         self.assertIn(".checkin-panel [data-checkin].is-loading::after", app_css)
 
+    def test_admin_requested_ui_refinements_are_present(self):
+        root = Path(__file__).resolve().parents[0]
+        app_js = (root / "app.js").read_text(encoding="utf-8")
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("activeAdminTicketId", app_js)
+        self.assertIn("data-select-admin-ticket", app_js)
+        self.assertIn("admin-ticket-chat", app_js)
+        self.assertIn("admin-ticket-thread", app_js)
+        self.assertIn("admin-ticket-conversation", app_js)
+        self.assertIn("admin-ticket-messages", app_js)
+        self.assertIn("admin-ticket-composer", app_js)
+
+        self.assertIn("body.is-authed #rechargeCardsView .recharge-card-layout", app_css)
+        self.assertIn("body.is-authed #rechargeCardsView .recharge-admin-panel", app_css)
+        self.assertIn("body.is-authed #rechargeCardsView .recharge-card-list-panel", app_css)
+        self.assertIn("min-height: clamp(390px, 48vh, 520px)", app_css)
+        self.assertIn("rgba(239, 246, 255", app_css)
+        self.assertIn(".admin-ticket-chat", app_css)
+        self.assertIn(".admin-ticket-thread", app_css)
+        self.assertIn(".admin-ticket-conversation", app_css)
+        self.assertIn(".admin-ticket-bubble", app_css)
+
 
 if __name__ == "__main__":
     unittest.main()
