@@ -1178,8 +1178,9 @@ function renderRechargeCards() {
     ? state.rechargeCards.map((card) => {
       const code = state.revealedCards[card.id] || card.masked_code;
       const disabled = card.can_reveal ? "" : "disabled";
+      const deleteDisabled = card.status === "used" ? "disabled" : "";
       const legacyHint = card.can_reveal ? "" : '<span class="meta">旧卡不可查看完整卡密</span>';
-      return '<article class="row-card recharge-card"><header><strong class="card-code">' + escapeHtml(code) + '</strong><span class="status ' + (card.status === "used" ? "disabled" : "active") + '">' + (card.status === "used" ? "已使用" : "未使用") + '</span></header><span class="meta">' + formatMoney(card.amount_cents) + (card.redeemed_by_email ? ' / ' + escapeHtml(card.redeemed_by_email) : "") + ' / ' + toDateTime(card.created_at) + '</span><div class="recharge-card-actions"><button type="button" class="ghost" data-reveal-card="' + card.id + '" ' + disabled + '>👁 查看</button><button type="button" class="ghost" data-copy-card="' + card.id + '" ' + disabled + '>复制</button>' + legacyHint + '</div></article>';
+      return '<article class="row-card recharge-card"><header><strong class="card-code">' + escapeHtml(code) + '</strong><span class="status ' + (card.status === "used" ? "disabled" : "active") + '">' + (card.status === "used" ? "已使用" : "未使用") + '</span></header><span class="meta">' + formatMoney(card.amount_cents) + (card.redeemed_by_email ? ' / ' + escapeHtml(card.redeemed_by_email) : "") + ' / ' + toDateTime(card.created_at) + '</span><div class="recharge-card-actions"><button type="button" class="ghost" data-reveal-card="' + card.id + '" ' + disabled + '>👁 查看</button><button type="button" class="ghost" data-copy-card="' + card.id + '" ' + disabled + '>复制</button><button type="button" class="danger" data-delete-card="' + card.id + '" ' + deleteDisabled + '>删除</button>' + legacyHint + '</div></article>';
     }).join("")
     : '<div class="empty-state">尚未生成充值卡</div>';
 }
@@ -1581,6 +1582,21 @@ async function handleDocumentClick(event) {
     const code = await revealRechargeCard(copyCard.dataset.copyCard);
     await copyPlainText(code);
     showNotice("充值卡密已复制");
+    return;
+  }
+
+  const deleteCard = target.closest("[data-delete-card]");
+  if (deleteCard) {
+    const id = deleteCard.dataset.deleteCard;
+    if (!window.confirm("确定删除这张充值卡吗？删除后不可恢复。")) return;
+    await api("/api/admin/recharge-cards/delete", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+      loadingLabel: "正在删除充值卡",
+    });
+    delete state.revealedCards[id];
+    await refreshAdmin();
+    showNotice("充值卡已删除");
     return;
   }
 

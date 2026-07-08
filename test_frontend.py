@@ -351,13 +351,19 @@ class FrontendTests(unittest.TestCase):
         admin_start = index_html.index('id="adminView"')
         admin_block = index_html[admin_start:index_html.index('id="rechargeCardsView"', admin_start)]
         self.assertIn('id="rechargeCardForm"', recharge_block)
+        self.assertNotIn('返回用户管理', recharge_block)
         self.assertNotIn('id="rechargeCardForm"', admin_block)
         self.assertIn('/api/admin/recharge-cards', app_js)
         self.assertIn('/api/admin/recharge-cards/reveal', app_js)
+        self.assertIn('/api/admin/recharge-cards/delete', app_js)
         self.assertIn("data-reveal-card", app_js)
         self.assertIn("data-copy-card", app_js)
+        self.assertIn("data-delete-card", app_js)
+        self.assertIn("充值卡已删除", app_js)
         self.assertIn("generatedCardCodes", app_js)
         self.assertIn('.recharge-admin-panel .inline-form', app_css)
+        self.assertIn('margin-top: 0 !important', app_css)
+        self.assertIn('min-height: clamp(460px, 58vh, 640px)', app_css)
         self.assertIn('grid-column: 1 / -1', app_css)
 
     def test_admin_configuration_sections_are_split_into_module_pages(self):
@@ -422,7 +428,7 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("body.is-authed #rechargeCardsView .recharge-card-layout", app_css)
         self.assertIn("body.is-authed #rechargeCardsView .recharge-admin-panel", app_css)
         self.assertIn("body.is-authed #rechargeCardsView .recharge-card-list-panel", app_css)
-        self.assertIn("min-height: clamp(390px, 48vh, 520px)", app_css)
+        self.assertIn("min-height: clamp(460px, 58vh, 640px)", app_css)
         self.assertIn("rgba(239, 246, 255", app_css)
         self.assertIn(".admin-ticket-chat", app_css)
         self.assertIn(".admin-ticket-thread", app_css)

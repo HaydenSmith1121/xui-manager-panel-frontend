@@ -26,7 +26,11 @@ body.is-authed #rechargeCardsView .recharge-admin-panel,
 body.is-authed #rechargeCardsView .recharge-card-list-panel {
   box-sizing: border-box !important;
   height: 100% !important;
-  min-height: clamp(390px, 48vh, 520px) !important;
+  min-height: clamp(460px, 58vh, 640px) !important;
+}
+
+body.is-authed #rechargeCardsView .recharge-admin-panel {
+  margin-top: 0 !important;
 }
 
 body.is-authed #rechargeCardsView .recharge-card-list-panel {
@@ -36,6 +40,7 @@ body.is-authed #rechargeCardsView .recharge-card-list-panel {
 
 body.is-authed #rechargeCardsView #rechargeCardList {
   flex: 1 1 auto !important;
+  min-height: 0 !important;
   overflow: auto !important;
 }
 
