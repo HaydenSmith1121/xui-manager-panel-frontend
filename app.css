@@ -14777,3 +14777,47 @@ body.is-authed #ticketsView.tickets-workspace {
     align-items: center !important;
   }
 }
+
+/* Authenticated top controls: separate toast, switches and profile button. */
+body.is-authed {
+  --authed-top-control: 22px;
+  --authed-profile-size: 58px;
+  --authed-control-gap: 14px;
+}
+
+@media (min-width: 761px) {
+  body.is-authed .profile-entry {
+    top: var(--authed-top-control) !important;
+    right: var(--authed-top-control) !important;
+    z-index: 1350 !important;
+  }
+
+  body.is-authed .app-toolbar {
+    top: var(--authed-top-control) !important;
+    right: calc(var(--authed-top-control) + var(--authed-profile-size) + var(--authed-control-gap)) !important;
+    z-index: 1340 !important;
+    align-items: center !important;
+  }
+
+  body.is-authed .notice {
+    top: calc(var(--authed-top-control) + var(--authed-profile-size) + 12px) !important;
+    right: var(--authed-top-control) !important;
+    width: min(360px, calc(100vw - 44px)) !important;
+    z-index: 1400 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.is-authed .app-toolbar {
+    top: 14px !important;
+    right: 14px !important;
+    z-index: 1340 !important;
+  }
+
+  body.is-authed .notice {
+    top: 76px !important;
+    right: 12px !important;
+    width: min(360px, calc(100vw - 24px)) !important;
+    z-index: 1400 !important;
+  }
+}
