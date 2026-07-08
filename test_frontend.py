@@ -59,6 +59,8 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('html[data-theme="dark"]', app_css)
         self.assertIn(".app-toolbar", app_css)
         self.assertIn(".toolbar-chip", app_css)
+        self.assertIn("body.is-guest .app-toolbar", app_css)
+        self.assertIn("right: max(196px", app_css)
 
     def test_public_storefront_and_authentication_are_separate(self):
         root = Path(__file__).resolve().parents[0]

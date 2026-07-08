@@ -13902,6 +13902,10 @@ body.is-authed #ticketsView .admin-ticket-composer textarea {
   backdrop-filter: blur(18px);
 }
 
+body.is-guest .app-toolbar {
+  right: max(196px, calc((100vw - min(100% - 64px, 1180px)) / 2 + 142px));
+}
+
 .toolbar-chip {
   appearance: none;
   border: 1px solid rgba(33, 104, 255, 0.12);
@@ -14077,5 +14081,10 @@ html[data-theme="dark"] .account-hero {
     min-height: 30px;
     padding: 0 9px;
     font-size: 12px;
+  }
+
+  body.is-guest .app-toolbar {
+    top: 70px;
+    right: 12px;
   }
 }
