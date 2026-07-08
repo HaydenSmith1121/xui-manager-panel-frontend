@@ -14732,3 +14732,48 @@ body.is-authed #ticketsView.tickets-workspace {
     padding-inline: 16px !important;
   }
 }
+/* Desktop guest header alignment: keep nav, switches and login on one rail. */
+@media (min-width: 761px) {
+  body.is-guest {
+    --guest-header-side-pad: clamp(22px, 4vw, 48px);
+    --guest-header-auth-width: 108px;
+    --guest-header-control-gap: 16px;
+  }
+
+  body.is-guest #storefrontView > .guest-topbar,
+  body.is-guest .storefront > .guest-topbar,
+  body.is-guest .guest-topbar {
+    align-items: center !important;
+    padding-left: var(--guest-header-side-pad) !important;
+    padding-right: var(--guest-header-side-pad) !important;
+  }
+
+  body.is-guest .guest-brand,
+  body.is-guest .guest-nav,
+  body.is-guest .guest-topbar > .guest-auth-actions {
+    align-self: center !important;
+  }
+
+  body.is-guest .guest-nav {
+    align-items: center !important;
+  }
+
+  body.is-guest .guest-nav button,
+  body.is-guest .guest-topbar > .guest-auth-actions button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+  }
+
+  body.is-guest .guest-topbar > .guest-auth-actions button {
+    min-width: var(--guest-header-auth-width) !important;
+  }
+
+  body.is-guest .app-toolbar {
+    top: calc((var(--guest-topbar-height) - 46px) / 2) !important;
+    right: calc(var(--guest-header-side-pad) + var(--guest-header-auth-width) + var(--guest-header-control-gap)) !important;
+    height: 46px !important;
+    align-items: center !important;
+  }
+}
