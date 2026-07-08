@@ -14150,3 +14150,42 @@ html[data-theme="dark"] body.is-guest .guest-final-cta .guest-auth-actions butto
     right: 12px;
   }
 }
+
+/* Mobile flow arrows: keep stacked steps connected downward */
+@media (max-width: 760px) {
+  body.is-guest .flow-timeline.flow-path {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  body.is-guest .flow-step-arrow {
+    width: 100% !important;
+    min-height: 38px !important;
+    height: 38px !important;
+    margin: 4px 0 8px !important;
+    align-self: center !important;
+    justify-self: center !important;
+    transform: none !important;
+    color: #1f6fff !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+  }
+
+  body.is-guest .flow-step-arrow::before {
+    content: "↓" !important;
+    display: grid !important;
+    place-items: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 999px !important;
+    background: rgba(33, 104, 255, 0.1) !important;
+    color: #1f6fff !important;
+    font-size: 26px !important;
+    font-weight: 950 !important;
+  }
+
+  html[data-theme="dark"] body.is-guest .flow-step-arrow::before {
+    background: rgba(56, 189, 248, 0.14) !important;
+    color: #67e8f9 !important;
+  }
+}

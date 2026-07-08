@@ -65,6 +65,15 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('html[data-theme="dark"] body.is-guest .compact-plan-card', app_css)
         self.assertIn('html[data-theme="dark"] body.is-guest .guest-section-heading h2', app_css)
 
+    def test_mobile_guest_flow_arrows_point_down(self):
+        app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Mobile flow arrows", app_css)
+        self.assertIn("body.is-guest .flow-step-arrow::before", app_css)
+        self.assertIn('content: "↓" !important', app_css)
+        self.assertIn("font-size: 0 !important", app_css)
+        self.assertIn('html[data-theme="dark"] body.is-guest .flow-step-arrow::before', app_css)
+
     def test_public_storefront_and_authentication_are_separate(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")
