@@ -14877,9 +14877,30 @@ body.is-authed {
 
 @media (max-width: 760px) {
   body.is-authed .app-toolbar {
-    top: 14px !important;
-    right: 14px !important;
+    position: fixed !important;
+    top: 80px !important;
+    right: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     z-index: 1340 !important;
+    width: min(100% - 32px, 360px) !important;
+    max-width: calc(100vw - 32px) !important;
+    margin: 0 !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 5px !important;
+    overflow: hidden !important;
+  }
+
+  body.is-authed .toolbar-chip {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 168px !important;
+    white-space: nowrap !important;
+  }
+
+  body.is-authed .storefront {
+    padding-top: 84px !important;
   }
 
   body.is-authed .notice {
