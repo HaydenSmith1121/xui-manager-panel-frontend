@@ -14346,6 +14346,15 @@ body.is-authed #ticketsView .ticket-sidebar {
   background: rgba(248, 251, 255, 0.78) !important;
 }
 
+body.is-authed #ticketsView.ticket-admin-mode .ticket-sidebar {
+  grid-template-rows: minmax(0, 1fr) !important;
+}
+
+body.is-authed #ticketsView.ticket-admin-mode #ticketForm,
+body.is-authed #ticketsView.ticket-admin-mode .ticket-list-panel.user-only {
+  display: none !important;
+}
+
 body.is-authed #ticketsView .ticket-compose-card,
 body.is-authed #ticketsView .ticket-list-panel {
   min-height: 0 !important;
@@ -14389,6 +14398,18 @@ body.is-authed #ticketsView .ticket-list-panel {
   overflow: hidden !important;
 }
 
+body.is-authed #ticketsView.ticket-admin-mode .ticket-list-panel.admin-only {
+  padding: 12px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+body.is-authed #ticketsView.ticket-admin-mode .ticket-list-panel.admin-only .ticket-panel-title {
+  padding: 2px 4px 8px !important;
+  border-bottom: 1px solid rgba(186, 207, 232, 0.56) !important;
+}
+
 body.is-authed #ticketsView .ticket-panel-title h2 {
   margin: 0 !important;
   color: #0f172a !important;
@@ -14396,11 +14417,19 @@ body.is-authed #ticketsView .ticket-panel-title h2 {
   letter-spacing: -0.03em !important;
 }
 
+body.is-authed #ticketsView.ticket-admin-mode .ticket-panel-title h2 {
+  font-size: 16px !important;
+}
+
 body.is-authed #ticketsView .ticket-panel-title p {
   margin: 5px 0 0 !important;
   color: #64748b !important;
   font-size: 12px !important;
   line-height: 1.45 !important;
+}
+
+body.is-authed #ticketsView.ticket-admin-mode .ticket-panel-title p {
+  display: none !important;
 }
 
 body.is-authed #ticketsView .ticket-list {
@@ -14523,6 +14552,35 @@ body.is-authed #ticketsView .ticket-composer.admin-ticket-composer {
   padding: 16px 18px !important;
   border-top: 1px solid rgba(186, 207, 232, 0.72) !important;
   background: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-chat-header {
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+body.is-authed #ticketsView .ticket-header-status {
+  display: grid !important;
+  gap: 6px !important;
+  min-width: 150px !important;
+  margin-left: auto !important;
+  color: #334155 !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+body.is-authed #ticketsView .ticket-header-status select {
+  width: 100% !important;
+  min-height: 40px !important;
+  border: 1px solid rgba(186, 207, 232, 0.9) !important;
+  border-radius: 14px !important;
+  background: #f8fbff !important;
+  color: #0f172a !important;
+  font-weight: 850 !important;
+}
+
+body.is-authed #ticketsView .admin-ticket-reply-form.ticket-composer.admin-ticket-composer {
+  grid-template-columns: minmax(0, 1fr) auto !important;
 }
 
 body.is-authed #ticketsView .ticket-composer textarea {

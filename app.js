@@ -1521,6 +1521,7 @@ function renderCheckin() {
 function renderTickets() {
   const target = $("#ticketList");
   if (!target) return;
+  $("#ticketsView")?.classList.remove("ticket-admin-mode");
   if (state.me?.role !== "user") {
     target.innerHTML = '<span class="meta">暂无工单</span>';
     return;
@@ -1544,6 +1545,7 @@ function renderAdminTickets() {
   const target = $("#adminTicketList");
   if (!target) return;
   target.classList.add("admin-ticket-thread");
+  $("#ticketsView")?.classList.toggle("ticket-admin-mode", state.me?.role === "admin");
   if (state.me?.role !== "admin") {
     target.innerHTML = '<span class="meta">暂无工单</span>';
     return;
@@ -1591,10 +1593,13 @@ function renderTicketConversationPane(ticket, mode) {
   const isAdmin = mode === "admin";
   const title = isAdmin ? escapeHtml(ticket.user_email || "未知用户") : escapeHtml(ticket.subject || "我的工单");
   const subtitle = isAdmin ? '#' + ticket.id + ' ' + escapeHtml(ticket.subject || "未命名工单") : '创建 ' + toDateTime(ticket.created_at) + ' · 更新 ' + toDateTime(ticket.updated_at || ticket.created_at);
+  const adminStatusControl = isAdmin
+    ? '<label class="ticket-header-status"><span>状态</span><select name="status" form="adminTicketReplyForm-' + ticket.id + '"><option value="open" ' + (ticket.status === "open" ? "selected" : "") + '>处理中</option><option value="pending" ' + (ticket.status === "pending" ? "selected" : "") + '>等待反馈</option><option value="closed" ' + (ticket.status === "closed" ? "selected" : "") + '>已关闭</option></select></label>'
+    : '<span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span>';
   const composer = isAdmin
-    ? '<form class="inline-form admin-ticket-reply-form admin-ticket-composer ticket-composer" data-admin-ticket-reply-form="' + ticket.id + '"><label>回复<textarea name="message" rows="3" maxlength="2000" placeholder="输入回复内容..." required></textarea></label><label>状态<select name="status"><option value="open" ' + (ticket.status === "open" ? "selected" : "") + '>处理中</option><option value="pending" ' + (ticket.status === "pending" ? "selected" : "") + '>等待反馈</option><option value="closed" ' + (ticket.status === "closed" ? "selected" : "") + '>已关闭</option></select></label><button type="submit">发送</button></form>'
+    ? '<form id="adminTicketReplyForm-' + ticket.id + '" class="inline-form admin-ticket-reply-form admin-ticket-composer ticket-composer" data-admin-ticket-reply-form="' + ticket.id + '"><label>回复<textarea name="message" rows="3" maxlength="2000" placeholder="输入回复内容..." required></textarea></label><button type="submit">发送</button></form>'
     : '<form class="inline-form user-ticket-reply-form admin-ticket-composer ticket-composer" data-user-ticket-reply-form="' + ticket.id + '"><label>继续反馈<textarea name="message" rows="3" maxlength="2000" required placeholder="补充你的问题或回复客服"></textarea></label><button type="submit">继续回复</button></form>';
-  pane.innerHTML = '<div class="admin-ticket-chat ticket-chat-frame"><section class="admin-ticket-conversation"><header class="admin-ticket-chat-header"><div><strong>' + title + '</strong><p>' + subtitle + '</p></div><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></header><div class="admin-ticket-messages">' + adminTicketMessagesHtml(ticket) + '</div>' + composer + '</section></div>';
+  pane.innerHTML = '<div class="admin-ticket-chat ticket-chat-frame"><section class="admin-ticket-conversation"><header class="admin-ticket-chat-header"><div><strong>' + title + '</strong><p>' + subtitle + '</p></div>' + adminStatusControl + '</header><div class="admin-ticket-messages">' + adminTicketMessagesHtml(ticket) + '</div>' + composer + '</section></div>';
 }
 
 function renderCheckinSettings() {
