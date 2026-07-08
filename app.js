@@ -13,6 +13,7 @@ const state = {
   checkinSettings: {},
   tickets: [],
   adminTickets: [],
+  activeTicketId: null,
   activeAdminTicketId: null,
   revealedCards: {},
   expandedUsers: new Set(),
@@ -1524,32 +1525,76 @@ function renderTickets() {
     target.innerHTML = '<span class="meta">暂无工单</span>';
     return;
   }
-  target.innerHTML = state.tickets.length
-    ? state.tickets.map((ticket) => '<article class="ticket-card"><header><strong>#' + ticket.id + ' ' + escapeHtml(ticket.subject) + '</strong><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></header><p>' + escapeHtml(ticket.message) + '</p><small>创建 ' + toDateTime(ticket.created_at) + ' / 更新 ' + toDateTime(ticket.updated_at) + '</small><div class="ticket-replies">' + ticketRepliesHtml(ticket) + '</div><form class="inline-form user-ticket-reply-form" data-user-ticket-reply-form="' + ticket.id + '"><label>继续反馈<textarea name="message" rows="3" maxlength="2000" required placeholder="补充你的问题或回复客服"></textarea></label><button type="submit">继续回复</button></form></article>').join("")
-    : '<span class="meta">暂无工单</span>';
+  if (!state.tickets.length) {
+    state.activeTicketId = null;
+    updateTicketStats([]);
+    target.innerHTML = '<div class="ticket-empty-list"><strong>暂无工单</strong><span>左上方提交一个新问题后，会在这里显示。</span></div>';
+    renderTicketConversationPane(null, "user");
+    return;
+  }
+
+  const activeTicket = state.tickets.find((ticket) => String(ticket.id) === String(state.activeTicketId)) || state.tickets[0];
+  state.activeTicketId = activeTicket.id;
+  updateTicketStats(state.tickets);
+  target.innerHTML = state.tickets.map((ticket) => ticketThreadButtonHtml(ticket, activeTicket, false)).join("");
+  renderTicketConversationPane(activeTicket, "user");
 }
 
 function renderAdminTickets() {
   const target = $("#adminTicketList");
   if (!target) return;
+  target.classList.add("admin-ticket-thread");
   if (state.me?.role !== "admin") {
     target.innerHTML = '<span class="meta">暂无工单</span>';
     return;
   }
   if (!state.adminTickets.length) {
     state.activeAdminTicketId = null;
-    target.innerHTML = '<span class="meta">暂无工单</span>';
+    updateTicketStats([]);
+    target.innerHTML = '<div class="ticket-empty-list"><strong>暂无工单</strong><span>用户提交工单后，会按会话显示在这里。</span></div>';
+    renderTicketConversationPane(null, "admin");
     return;
   }
 
   const activeTicket = state.adminTickets.find((ticket) => String(ticket.id) === String(state.activeAdminTicketId)) || state.adminTickets[0];
   state.activeAdminTicketId = activeTicket.id;
-  const threadHtml = state.adminTickets.map((ticket) => {
-    const active = String(ticket.id) === String(activeTicket.id);
-    return '<button type="button" class="admin-ticket-person ' + (active ? "active" : "") + '" data-select-admin-ticket="' + ticket.id + '"><span class="admin-ticket-avatar">' + adminTicketInitial(ticket) + '</span><span class="admin-ticket-person-main"><strong>#' + ticket.id + ' ' + escapeHtml(ticket.subject) + '</strong><small>' + escapeHtml(ticket.user_email || "未知用户") + '</small><em>回复 ' + (ticket.reply_count || 0) + ' · ' + toDateTime(ticket.updated_at) + '</em></span><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></button>';
-  }).join("");
+  updateTicketStats(state.adminTickets);
+  target.innerHTML = state.adminTickets.map((ticket) => ticketThreadButtonHtml(ticket, activeTicket, true)).join("");
+  renderTicketConversationPane(activeTicket, "admin");
+}
 
-  target.innerHTML = '<div class="admin-ticket-chat"><aside class="admin-ticket-thread" aria-label="工单联系人列表">' + threadHtml + '</aside><section class="admin-ticket-conversation"><header class="admin-ticket-chat-header"><div><strong>' + escapeHtml(activeTicket.user_email || "未知用户") + '</strong><p>#' + activeTicket.id + ' ' + escapeHtml(activeTicket.subject) + '</p></div><span class="status ' + escapeHtml(activeTicket.status) + '">' + ticketStatusText(activeTicket.status) + '</span></header><div class="admin-ticket-messages">' + adminTicketMessagesHtml(activeTicket) + '</div><form class="inline-form admin-ticket-reply-form admin-ticket-composer" data-admin-ticket-reply-form="' + activeTicket.id + '"><label>回复<textarea name="message" rows="3" maxlength="2000" placeholder="输入回复内容..." required></textarea></label><label>状态<select name="status"><option value="open" ' + (activeTicket.status === "open" ? "selected" : "") + '>处理中</option><option value="pending" ' + (activeTicket.status === "pending" ? "selected" : "") + '>等待反馈</option><option value="closed" ' + (activeTicket.status === "closed" ? "selected" : "") + '>已关闭</option></select></label><button type="submit">发送</button></form></section></div>';
+function ticketThreadButtonHtml(ticket, activeTicket, isAdmin) {
+  const active = String(ticket.id) === String(activeTicket.id);
+  const selector = isAdmin ? 'data-select-admin-ticket="' + ticket.id + '"' : 'data-select-user-ticket="' + ticket.id + '"';
+  const subject = '#' + ticket.id + ' ' + escapeHtml(ticket.subject || "未命名工单");
+  const sender = isAdmin ? escapeHtml(ticket.user_email || "未知用户") : '我提交的工单';
+  return '<button type="button" class="admin-ticket-person ticket-thread-item ' + (active ? "active" : "") + '" ' + selector + '><span class="admin-ticket-avatar">' + adminTicketInitial(ticket) + '</span><span class="admin-ticket-person-main"><strong>' + subject + '</strong><small>' + sender + '</small><em>回复 ' + (ticket.reply_count || (ticket.replies || []).length || 0) + ' · ' + toDateTime(ticket.updated_at || ticket.created_at) + '</em></span><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></button>';
+}
+
+function updateTicketStats(tickets) {
+  const openNode = $("#ticketOpenCount");
+  const closedNode = $("#ticketClosedCount");
+  if (!openNode || !closedNode) return;
+  const closed = tickets.filter((ticket) => ticket.status === "closed").length;
+  openNode.textContent = String(tickets.length - closed);
+  closedNode.textContent = String(closed);
+}
+
+function renderTicketConversationPane(ticket, mode) {
+  const pane = $("#ticketConversationPane");
+  if (!pane) return;
+  pane.classList.add("ticket-conversation-pane");
+  if (!ticket) {
+    pane.innerHTML = '<div class="ticket-empty-conversation"><span aria-hidden="true">💬</span><strong>' + (mode === "admin" ? '暂无待处理工单' : '选择左侧工单开始查看对话') + '</strong><p>' + (mode === "admin" ? '新的用户工单会显示在左侧会话列表。' : '工单内容、回复记录和输入框都会显示在这里。') + '</p></div>';
+    return;
+  }
+  const isAdmin = mode === "admin";
+  const title = isAdmin ? escapeHtml(ticket.user_email || "未知用户") : escapeHtml(ticket.subject || "我的工单");
+  const subtitle = isAdmin ? '#' + ticket.id + ' ' + escapeHtml(ticket.subject || "未命名工单") : '创建 ' + toDateTime(ticket.created_at) + ' · 更新 ' + toDateTime(ticket.updated_at || ticket.created_at);
+  const composer = isAdmin
+    ? '<form class="inline-form admin-ticket-reply-form admin-ticket-composer ticket-composer" data-admin-ticket-reply-form="' + ticket.id + '"><label>回复<textarea name="message" rows="3" maxlength="2000" placeholder="输入回复内容..." required></textarea></label><label>状态<select name="status"><option value="open" ' + (ticket.status === "open" ? "selected" : "") + '>处理中</option><option value="pending" ' + (ticket.status === "pending" ? "selected" : "") + '>等待反馈</option><option value="closed" ' + (ticket.status === "closed" ? "selected" : "") + '>已关闭</option></select></label><button type="submit">发送</button></form>'
+    : '<form class="inline-form user-ticket-reply-form admin-ticket-composer ticket-composer" data-user-ticket-reply-form="' + ticket.id + '"><label>继续反馈<textarea name="message" rows="3" maxlength="2000" required placeholder="补充你的问题或回复客服"></textarea></label><button type="submit">继续回复</button></form>';
+  pane.innerHTML = '<div class="admin-ticket-chat ticket-chat-frame"><section class="admin-ticket-conversation"><header class="admin-ticket-chat-header"><div><strong>' + title + '</strong><p>' + subtitle + '</p></div><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></header><div class="admin-ticket-messages">' + adminTicketMessagesHtml(ticket) + '</div>' + composer + '</section></div>';
 }
 
 function renderCheckinSettings() {
@@ -1638,6 +1683,12 @@ async function handleDocumentClick(event) {
   if (adminTicketButton) {
     state.activeAdminTicketId = adminTicketButton.dataset.selectAdminTicket;
     renderAdminTickets();
+    return;
+  }
+  const userTicketButton = target.closest("[data-select-user-ticket]");
+  if (userTicketButton) {
+    state.activeTicketId = userTicketButton.dataset.selectUserTicket;
+    renderTickets();
     return;
   }
   const rechargeFocusButton = target.closest("[data-focus-recharge]");
@@ -1968,6 +2019,7 @@ function bindEvents() {
     state.checkin = null;
     state.tickets = [];
     state.adminTickets = [];
+    state.activeTicketId = null;
     state.activeAdminTicketId = null;
     state.adminTutorials = [];
     state.checkinSettings = {};
@@ -2032,6 +2084,7 @@ function bindEvents() {
   $("#ticketForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
     await api("/api/tickets", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在提交工单" });
     form.reset();
+    state.activeTicketId = null;
     await refreshTickets();
     showNotice("工单已提交");
   }));

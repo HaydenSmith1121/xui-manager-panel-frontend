@@ -507,15 +507,26 @@ class FrontendTests(unittest.TestCase):
 
     def test_ticket_help_page_keeps_scroll_inside_panels(self):
         root = Path(__file__).resolve().parents[0]
+        index_html = (root / "index.html").read_text(encoding="utf-8")
+        app_js = (root / "app.js").read_text(encoding="utf-8")
         app_css = (root / "app.css").read_text(encoding="utf-8")
 
-        self.assertIn("Ticket help viewport fit", app_css)
+        self.assertIn('class="ticket-workbench"', index_html)
+        self.assertIn('class="ticket-chat-shell"', index_html)
+        self.assertIn('class="ticket-sidebar"', index_html)
+        self.assertIn('id="ticketConversationPane"', index_html)
+        self.assertIn("admin-conversation-list", index_html)
+        self.assertIn("renderTicketConversationPane", app_js)
+        self.assertIn("ticket-conversation-pane", app_js)
+        self.assertIn("Ticket help redesign: conversation workbench", app_css)
         self.assertIn("body.is-authed #ticketsView.tickets-workspace", app_css)
-        self.assertIn("padding-top: clamp(18px, 2.4vw, 30px)", app_css)
-        self.assertIn("max-height: min(46svh, 420px)", app_css)
+        self.assertIn("height: 100svh !important", app_css)
+        self.assertIn("overflow: hidden !important", app_css)
+        self.assertIn("grid-template-columns: minmax(280px, 340px) minmax(0, 1fr)", app_css)
+        self.assertIn(".ticket-conversation-pane", app_css)
+        self.assertIn(".ticket-empty-conversation", app_css)
         self.assertIn("overflow: auto !important", app_css)
-        self.assertIn("height: min(68svh, 560px)", app_css)
-        self.assertIn("min-height: 104px", app_css)
+        self.assertIn('html[data-theme="dark"] .ticket-workbench', app_css)
 
     def test_node_status_menu_switch_does_not_shift_page_sideways(self):
         root = Path(__file__).resolve().parents[0]
@@ -545,7 +556,6 @@ class FrontendTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
 class SplitFrontendConfigTests(unittest.TestCase):
     def test_frontend_supports_configurable_api_base_url(self):
         root = Path(__file__).resolve().parents[0]
