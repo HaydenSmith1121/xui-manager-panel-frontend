@@ -1521,6 +1521,7 @@ button.danger {
 
 .recharge-admin-panel { margin-top: 18px; }
 .recharge-admin-panel .inline-form { margin-top: 18px; }
+.recharge-admin-panel .form-note { margin-top: 14px; }
 
 .generated-codes {
   overflow: auto;
