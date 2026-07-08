@@ -38,6 +38,28 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("body.is-guest .guest-topbar::before", app_css)
         self.assertIn("scroll-margin-top: calc(var(--guest-topbar-height) + 18px)", app_css)
 
+    def test_theme_and_language_controls_are_available_globally(self):
+        root = Path(__file__).resolve().parents[0]
+        index_html = (root / "index.html").read_text(encoding="utf-8")
+        app_js = (root / "app.js").read_text(encoding="utf-8")
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn('id="languageToggleBtn"', index_html)
+        self.assertIn('id="themeToggleBtn"', index_html)
+        self.assertIn("data-toggle-language", index_html)
+        self.assertIn("data-toggle-theme", index_html)
+        self.assertIn('localStorage.getItem("xui-theme")', app_js)
+        self.assertIn('localStorage.getItem("xui-language")', app_js)
+        self.assertIn('localStorage.setItem("xui-theme", theme)', app_js)
+        self.assertIn('localStorage.setItem("xui-language", language)', app_js)
+        self.assertIn("function applyTheme", app_js)
+        self.assertIn("function applyLanguage", app_js)
+        self.assertIn("function toggleTheme", app_js)
+        self.assertIn("function toggleLanguage", app_js)
+        self.assertIn('html[data-theme="dark"]', app_css)
+        self.assertIn(".app-toolbar", app_css)
+        self.assertIn(".toolbar-chip", app_css)
+
     def test_public_storefront_and_authentication_are_separate(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")

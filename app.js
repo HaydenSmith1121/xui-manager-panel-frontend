@@ -28,6 +28,8 @@ const state = {
   authReturnFocus: null,
   profilePrefs: { expireReminder: true, trafficReminder: true },
   profileAvatar: "",
+  theme: localStorage.getItem("xui-theme") || "light",
+  language: localStorage.getItem("xui-language") || "zh",
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -38,6 +40,145 @@ const API_BASE_URL = (
   localStorage.getItem("XUI_MANAGER_API_BASE_URL") ||
   ""
 ).replace(/\/+$/, "");
+
+const UI_LANGUAGE = {
+  zh: {
+    nav: {
+      storefront: "套餐中心",
+      account: "我的订阅",
+      balance: "我的余额",
+      nodeStatus: "可用节点",
+      guide: "导入教程",
+      tickets: "工单帮助",
+      admin: "用户",
+      rechargeCards: "充值卡",
+      config: "配置模块",
+    },
+    guest: {
+      hero: "黑心云",
+      plans: "套餐价格",
+      clients: "支持设备",
+      flow: "开通步骤",
+    },
+    controls: {
+      language: "中文",
+      languageIcon: "中",
+      languageAria: "切换显示语言",
+      dark: "暗色",
+      light: "亮色",
+      darkIcon: "☾",
+      lightIcon: "☀",
+      themeAria: "切换白天黑夜模式",
+      login: "登录",
+      profile: "个人中心",
+      profileLoggedOut: "登录账号",
+    },
+  },
+  en: {
+    nav: {
+      storefront: "Plans",
+      account: "Subscription",
+      balance: "Balance",
+      nodeStatus: "Nodes",
+      guide: "Guide",
+      tickets: "Tickets",
+      admin: "Users",
+      rechargeCards: "Cards",
+      config: "Settings",
+    },
+    guest: {
+      hero: "Heixinyun",
+      plans: "Pricing",
+      clients: "Devices",
+      flow: "Setup",
+    },
+    controls: {
+      language: "English",
+      languageIcon: "EN",
+      languageAria: "Switch display language",
+      dark: "Dark",
+      light: "Light",
+      darkIcon: "☾",
+      lightIcon: "☀",
+      themeAria: "Switch light and dark mode",
+      login: "Login",
+      profile: "Profile",
+      profileLoggedOut: "Login",
+    },
+  },
+};
+
+function getUiText() {
+  return UI_LANGUAGE[state.language] || UI_LANGUAGE.zh;
+}
+
+function setToolbarButton(button, icon, label, ariaLabel) {
+  if (!button) return;
+  const iconNode = button.querySelector(".toolbar-chip-icon");
+  const textNode = button.querySelector(".toolbar-chip-text");
+  if (iconNode) iconNode.textContent = icon;
+  if (textNode) textNode.textContent = label;
+  button.setAttribute("aria-label", ariaLabel);
+}
+
+function updateNavLanguage() {
+  const labels = getUiText().nav;
+  $$(".nav [data-view], #mobileNav [data-view]").forEach((button) => {
+    const label = labels[button.dataset.view];
+    if (!label) return;
+    const target = button.querySelector(".nav-label-main") || button.querySelector("span:not(.nav-legacy-label)") || button;
+    target.textContent = label;
+  });
+}
+
+function updateGuestLanguage() {
+  const labels = getUiText().guest;
+  $$('[data-scroll-guest]').forEach((button) => {
+    const label = labels[button.dataset.scrollGuest];
+    if (!label) return;
+    const strong = button.querySelector("strong");
+    if (strong) strong.textContent = label;
+    else button.textContent = label;
+  });
+}
+
+function applyTheme() {
+  const theme = state.theme === "dark" ? "dark" : "light";
+  state.theme = theme;
+  document.documentElement.dataset.theme = theme;
+  document.body.dataset.theme = theme;
+  const labels = getUiText().controls;
+  setToolbarButton(
+    $("#themeToggleBtn"),
+    theme === "dark" ? labels.lightIcon : labels.darkIcon,
+    theme === "dark" ? labels.light : labels.dark,
+    labels.themeAria
+  );
+  localStorage.setItem("xui-theme", theme);
+}
+
+function applyLanguage() {
+  const language = state.language === "en" ? "en" : "zh";
+  state.language = language;
+  document.documentElement.lang = language === "en" ? "en" : "zh-CN";
+  const labels = getUiText().controls;
+  setToolbarButton($("#languageToggleBtn"), labels.languageIcon, labels.language, labels.languageAria);
+  updateNavLanguage();
+  updateGuestLanguage();
+  renderAuth();
+  applyTheme();
+  localStorage.setItem("xui-language", language);
+}
+
+function toggleTheme() {
+  state.theme = state.theme === "dark" ? "light" : "dark";
+  applyTheme();
+}
+
+function toggleLanguage() {
+  state.language = state.language === "zh" ? "en" : "zh";
+  applyLanguage();
+}
 
 function apiUrl(path) {
   if (!API_BASE_URL) return path;
@@ -627,6 +768,8 @@ function setView(view) {
     renderTickets();
     renderAdminTickets();
   }
+  updateNavLanguage();
+  updateGuestLanguage();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -746,10 +889,13 @@ function renderAuth() {
   $$(".user-only").forEach((node) => node.classList.toggle("hidden", !loggedIn || isAdmin));
   const mobileAccount = $("#mobileAccountBtn");
   const mobileAccountLabel = $("#mobileAccountLabel");
-  mobileAccountLabel.textContent = loggedIn ? "个人中心" : "登录";
-  mobileAccount.setAttribute("aria-label", loggedIn ? `个人中心：${state.me.email}` : "登录账号");
-  $("#profileEntryLabel").textContent = loggedIn ? `个人中心：${state.me.email}` : "登录账号";
-  $("#profileEntryBtn").setAttribute("aria-label", loggedIn ? `个人中心：${state.me.email}` : "登录账号");
+  const uiLabels = getUiText().controls;
+  const profileLabel = loggedIn ? uiLabels.profile : uiLabels.login;
+  const profileAria = loggedIn ? uiLabels.profile + "：" + state.me.email : uiLabels.profileLoggedOut;
+  mobileAccountLabel.textContent = profileLabel;
+  mobileAccount.setAttribute("aria-label", profileAria);
+  $("#profileEntryLabel").textContent = profileAria;
+  $("#profileEntryBtn").setAttribute("aria-label", profileAria);
   setAvatarNode($("#profileEntryAvatar"));
   setAvatarNode($("#mobileAvatar"), "small");
   setAvatarNode($("#profileHeroAvatar"), "large");
@@ -1469,6 +1615,14 @@ async function finishAuthentication(user) {
 async function handleDocumentClick(event) {
   const target = event.target instanceof Element ? event.target : null;
   if (!target) return;
+  if (target.closest("[data-toggle-theme]")) {
+    toggleTheme();
+    return;
+  }
+  if (target.closest("[data-toggle-language]")) {
+    toggleLanguage();
+    return;
+  }
   const adminTicketButton = target.closest("[data-select-admin-ticket]");
   if (adminTicketButton) {
     state.activeAdminTicketId = adminTicketButton.dataset.selectAdminTicket;
@@ -1945,6 +2099,8 @@ function bindEvents() {
 }
 
 async function boot() {
+  applyTheme();
+  applyLanguage();
   bindEvents();
   resetPlanForm();
   resetPanelForm();

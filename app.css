@@ -13883,3 +13883,198 @@ body.is-authed #ticketsView .admin-ticket-composer textarea {
     height: auto !important;
   }
 }
+
+/* Global display controls and dark mode, inspired by compact dashboard toolbars. */
+.app-toolbar {
+  position: fixed;
+  top: 16px;
+  right: 86px;
+  z-index: 1250;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border: 1px solid rgba(216, 229, 247, 0.78);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 42px rgba(26, 78, 145, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.toolbar-chip {
+  appearance: none;
+  border: 1px solid rgba(33, 104, 255, 0.12);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.96));
+  color: #16345f;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  min-width: 74px;
+  padding: 0 13px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.toolbar-chip:hover,
+.toolbar-chip:focus-visible {
+  background: linear-gradient(180deg, #ffffff, #eef6ff);
+  border-color: rgba(73, 151, 255, 0.35);
+  box-shadow: 0 10px 24px rgba(33, 104, 255, 0.12);
+  color: #0d4ed6;
+  transform: translateY(-1px);
+}
+
+.toolbar-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #e6eefb;
+  --ink-soft: #c7d5ea;
+  --muted: #91a5bf;
+  --blue: #6fa4ff;
+  --blue-dark: #8ab5ff;
+  --accent-cyan: #67e8f9;
+  --cloud: #08111f;
+  --surface: #111a2b;
+  --line: rgba(148, 163, 184, 0.24);
+  --green: #5ee0ad;
+  --amber: #f0b35d;
+  --red: #ff8a8a;
+  --shadow: 0 22px 62px rgba(0, 0, 0, 0.38);
+}
+
+html[data-theme="dark"] body {
+  background: radial-gradient(circle at 16% 0%, rgba(41, 98, 184, 0.16), transparent 32%), #08111f !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .sidebar,
+html[data-theme="dark"] .mobile-header,
+html[data-theme="dark"] .mobile-nav,
+html[data-theme="dark"] .guest-topbar,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .list-panel,
+html[data-theme="dark"] .table-wrap,
+html[data-theme="dark"] .settings-dialog,
+html[data-theme="dark"] .auth-shell,
+html[data-theme="dark"] .admin-ticket-chat,
+html[data-theme="dark"] .ticket-list-panel,
+html[data-theme="dark"] .recharge-admin-panel,
+html[data-theme="dark"] .recharge-card-list-panel,
+html[data-theme="dark"] .config-module-card,
+html[data-theme="dark"] .app-toolbar {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+html[data-theme="dark"] .main-shell,
+html[data-theme="dark"] .storefront,
+html[data-theme="dark"] .guest-module,
+html[data-theme="dark"] .home,
+html[data-theme="dark"] .view {
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .toolbar-chip {
+  background: rgba(30, 41, 59, 0.96);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: #dbeafe;
+}
+
+html[data-theme="dark"] .toolbar-chip:hover,
+html[data-theme="dark"] .toolbar-chip:focus-visible {
+  background: rgba(51, 65, 85, 0.96);
+  border-color: rgba(103, 232, 249, 0.34);
+  color: #f8fafc;
+  box-shadow: 0 10px 28px rgba(103, 232, 249, 0.12);
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background: rgba(8, 17, 31, 0.96) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: rgba(199, 213, 234, 0.52) !important;
+}
+
+html[data-theme="dark"] .meta,
+html[data-theme="dark"] small,
+html[data-theme="dark"] .form-note,
+html[data-theme="dark"] .field-help,
+html[data-theme="dark"] .page-heading p,
+html[data-theme="dark"] .guest-section-heading p,
+html[data-theme="dark"] .hero-lede {
+  color: var(--muted) !important;
+}
+
+html[data-theme="dark"] .nav-item,
+html[data-theme="dark"] .mobile-nav button,
+html[data-theme="dark"] .guest-nav button,
+html[data-theme="dark"] .guest-auth-actions button,
+html[data-theme="dark"] .ghost,
+html[data-theme="dark"] .link-button {
+  color: var(--ink-soft) !important;
+}
+
+html[data-theme="dark"] .nav-item.active,
+html[data-theme="dark"] .mobile-nav button.active,
+html[data-theme="dark"] .guest-nav button:hover,
+html[data-theme="dark"] .guest-auth-actions button:hover {
+  background: rgba(37, 99, 235, 0.22) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .ticket-card,
+html[data-theme="dark"] .admin-ticket-person,
+html[data-theme="dark"] .admin-message-bubble,
+html[data-theme="dark"] .recharge-card-row,
+html[data-theme="dark"] .transaction-row,
+html[data-theme="dark"] .profile-card {
+  background: rgba(15, 23, 42, 0.82) !important;
+  border-color: var(--line) !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] .guest-hero,
+html[data-theme="dark"] .hero,
+html[data-theme="dark"] .account-hero {
+  background: radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.28), transparent 34%), rgba(15, 23, 42, 0.76) !important;
+  border-color: var(--line) !important;
+}
+
+@media (max-width: 760px) {
+  .app-toolbar {
+    top: 66px;
+    right: 12px;
+    gap: 6px;
+    padding: 5px;
+  }
+
+  .toolbar-chip {
+    min-width: 58px;
+    min-height: 30px;
+    padding: 0 9px;
+    font-size: 12px;
+  }
+}
