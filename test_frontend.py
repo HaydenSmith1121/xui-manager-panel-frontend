@@ -428,6 +428,14 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('min-height: clamp(460px, 58vh, 640px)', app_css)
         self.assertIn('grid-column: 1 / -1', app_css)
 
+    def test_recharge_card_delete_not_found_removes_local_card(self):
+        app_js = (Path(__file__).resolve().parents[0] / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn("function isNotFoundError", app_js)
+        self.assertIn("function removeRechargeCardLocally", app_js)
+        self.assertIn("isNotFoundError(error)", app_js)
+        self.assertIn("接口返回 Not found，已从当前列表移除这张充值卡", app_js)
+
     def test_admin_configuration_sections_are_split_into_module_pages(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")

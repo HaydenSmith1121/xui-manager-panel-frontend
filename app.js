@@ -1317,6 +1317,17 @@ function renderAdmin() {
   renderAdminTutorials();
 }
 
+function isNotFoundError(error) {
+  const message = String(error?.message || error || "");
+  return /not found|404|不存在/i.test(message);
+}
+
+function removeRechargeCardLocally(id) {
+  state.rechargeCards = state.rechargeCards.filter((card) => String(card.id) !== String(id));
+  delete state.revealedCards[id];
+  renderRechargeCards();
+}
+
 function renderRechargeCards() {
   const target = $("#rechargeCardList");
   if (!target) return;
@@ -1743,14 +1754,20 @@ async function handleDocumentClick(event) {
   if (deleteCard) {
     const id = deleteCard.dataset.deleteCard;
     if (!window.confirm("确定删除这张充值卡吗？删除后不可恢复。")) return;
-    await api("/api/admin/recharge-cards/delete", {
-      method: "POST",
-      body: JSON.stringify({ id }),
-      loadingLabel: "正在删除充值卡",
-    });
-    delete state.revealedCards[id];
-    await refreshAdmin();
-    showNotice("充值卡已删除");
+    try {
+      await api("/api/admin/recharge-cards/delete", {
+        method: "POST",
+        body: JSON.stringify({ id }),
+        loadingLabel: "正在删除充值卡",
+      });
+      delete state.revealedCards[id];
+      await refreshAdmin();
+      showNotice("充值卡已删除");
+    } catch (error) {
+      if (!isNotFoundError(error)) throw error;
+      removeRechargeCardLocally(id);
+      showNotice("接口返回 Not found，已从当前列表移除这张充值卡");
+    }
     return;
   }
 
