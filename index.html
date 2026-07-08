@@ -27,8 +27,7 @@
           <button class="nav-item user-only hidden" type="button" data-view="tickets"><span>工单帮助</span></button>
           <button class="nav-item admin-only hidden" type="button" data-view="admin"><span>用户</span></button>
           <button class="nav-item admin-only hidden" type="button" data-view="rechargeCards"><span>充值卡</span></button>
-          <button class="nav-item admin-only hidden" type="button" data-view="nodes"><span>节点配置</span></button>
-          <button class="nav-item admin-only hidden" type="button" data-view="settings"><span>配置</span></button>
+          <button class="nav-item admin-only hidden" type="button" data-view="config"><span>配置模块</span></button>
           <button class="nav-item admin-only hidden" type="button" data-view="tickets"><span>工单帮助</span></button>
         </nav>
       </aside>
@@ -514,8 +513,20 @@
           </div>
         </section>
 
-        <section id="nodesView" class="view admin-workspace hidden">
-          <div class="page-heading"><div><p class="eyebrow">NODE CONTROL</p><h1>节点管理</h1><p>配置托管节点与 X-UI 入站。</p></div></div>
+        <section id="configView" class="view admin-workspace config-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG CENTER</p><h1>配置模块</h1><p>节点、系统、签到、教程、套餐和面板配置统一入口。</p></div></div>
+          <div class="config-module-grid" aria-label="配置模块入口">
+            <button type="button" class="config-module-card" data-view="configNodes"><span>节点配置</span><small>托管节点、静态链接、入站绑定</small></button>
+            <button type="button" class="config-module-card" data-view="configSystem"><span>系统配置</span><small>订阅名称与自动同步间隔</small></button>
+            <button type="button" class="config-module-card" data-view="configCheckin"><span>签到配置</span><small>每日签到奖励与领取规则</small></button>
+            <button type="button" class="config-module-card" data-view="configTutorials"><span>教程配置</span><small>平台教程、图片与前台展示</small></button>
+            <button type="button" class="config-module-card" data-view="configPlans"><span>套餐配置</span><small>商城套餐、流量包和购买提示</small></button>
+            <button type="button" class="config-module-card" data-view="configPanels"><span>面板配置</span><small>X-UI 面板凭据和入站拉取</small></button>
+          </div>
+        </section>
+
+        <section id="configNodesView" class="view admin-workspace config-detail-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG / NODES</p><h1>节点配置</h1><p>配置托管节点与 X-UI 入站。</p></div><button type="button" class="ghost" data-view="config">返回配置模块</button></div>
           <div class="split">
             <form id="nodeForm" class="panel">
               <h2>节点配置</h2>
@@ -536,14 +547,18 @@
           </div>
         </section>
 
-        <section id="settingsView" class="view admin-workspace hidden">
-          <div class="page-heading"><div><p class="eyebrow">SYSTEM SETTINGS</p><h1>系统配置</h1><p>管理套餐、面板和全局订阅设置。</p></div></div>
+        <section id="configSystemView" class="view admin-workspace config-detail-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG / SYSTEM</p><h1>系统配置</h1><p>管理全局订阅显示与自动同步。</p></div><button type="button" class="ghost" data-view="config">返回配置模块</button></div>
           <form id="settingsForm" class="panel compact-form settings-form">
             <div class="form-intro"><h2>全局设置</h2><p>控制订阅显示与自动同步。</p></div>
             <label>订阅显示名称<input name="subscription_title" maxlength="80" placeholder="黑心云"></label>
             <label>自动同步间隔（秒）<input name="sync_interval_seconds" type="number" min="60" max="86400" step="60" value="300"></label>
             <button type="submit">保存设置</button>
           </form>
+        </section>
+
+        <section id="configCheckinView" class="view admin-workspace config-detail-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG / CHECK-IN</p><h1>签到配置</h1><p>设置每日签到奖励，默认仅允许已开通套餐用户领取。</p></div><button type="button" class="ghost" data-view="config">返回配置模块</button></div>
           <form id="checkinSettingsForm" class="panel compact-form checkin-settings-form">
             <div class="form-intro"><h2>签到配置</h2><p>设置每日签到奖励，默认仅允许已开通套餐用户领取。</p></div>
             <label class="check"><input name="enabled" type="checkbox">开启签到</label>
@@ -554,8 +569,12 @@
             <label class="check"><input name="active_plan_only" type="checkbox" checked>仅开通套餐用户</label>
             <button type="submit">保存签到配置</button>
           </form>
+        </section>
+
+        <section id="configTutorialsView" class="view admin-workspace config-detail-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG / TUTORIALS</p><h1>教程配置</h1><p>按平台维护给客户看的导入教程。</p></div><button type="button" class="ghost" data-view="config">返回配置模块</button></div>
           <form id="tutorialForm" class="panel compact-form tutorial-form">
-            <div class="form-intro"><h2>使用教程</h2><p>按平台维护给客户看的教程。正文支持换行、链接和图片地址；上传图片会转换为可保存的 data URL。</p></div>
+            <div class="form-intro"><h2>使用教程</h2><p>正文支持换行、链接和图片地址；上传图片会转换为可保存的 data URL。</p></div>
             <input name="id" type="hidden">
             <label>平台分类<input name="platform" maxlength="60" placeholder="Windows / Android / iOS / macOS" required></label>
             <label>教程标题<input name="title" maxlength="120" placeholder="Clash Verge 一键导入" required></label>
@@ -566,14 +585,20 @@
             <label class="wide-field">正文<textarea name="content" rows="6" maxlength="6000" placeholder="步骤 1：复制订阅链接&#10;步骤 2：打开客户端导入。" required></textarea></label>
             <button type="submit">保存教程</button>
           </form>
-          <div class="split lists-split">
-            <div class="list-panel"><div class="list-heading"><div><h2>套餐列表</h2><span>商城实时读取</span></div><button id="newPlanBtn" type="button">新增套餐</button></div><div id="planList" class="row-list"></div></div>
-            <div class="list-panel"><div class="list-heading"><div><h2>面板列表</h2><span>凭据仅本机保存</span></div><button id="newPanelBtn" type="button">新增面板</button></div><div id="panelList" class="row-list"></div></div>
-          </div>
           <section class="list-panel tutorial-list-panel">
             <div class="list-heading"><div><h2>教程列表</h2><span>分类展示给客户</span></div><button type="button" class="ghost" data-reset-tutorial-form>清空表单</button></div>
             <div id="tutorialList" class="tutorial-list row-list"></div>
           </section>
+        </section>
+
+        <section id="configPlansView" class="view admin-workspace config-detail-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG / PLANS</p><h1>套餐配置</h1><p>管理商城套餐、流量包、时长包和购买提示。</p></div><button type="button" class="ghost" data-view="config">返回配置模块</button></div>
+          <div class="list-panel"><div class="list-heading"><div><h2>套餐列表</h2><span>商城实时读取</span></div><button id="newPlanBtn" type="button">新增套餐</button></div><div id="planList" class="row-list"></div></div>
+        </section>
+
+        <section id="configPanelsView" class="view admin-workspace config-detail-workspace hidden">
+          <div class="page-heading"><div><p class="eyebrow">CONFIG / PANELS</p><h1>面板配置</h1><p>管理 X-UI 面板凭据，并为节点配置拉取入站。</p></div><button type="button" class="ghost" data-view="config">返回配置模块</button></div>
+          <div class="list-panel"><div class="list-heading"><div><h2>面板列表</h2><span>凭据仅本机保存</span></div><button id="newPanelBtn" type="button">新增面板</button></div><div id="panelList" class="row-list"></div></div>
         </section>
       </main>
     </div>
@@ -587,8 +612,7 @@
       <button type="button" class="user-only hidden" data-view="tickets"><span>工单帮助</span></button>
       <button type="button" class="admin-only hidden" data-view="admin"><span>用户</span></button>
       <button type="button" class="admin-only hidden" data-view="rechargeCards"><span>充值卡</span></button>
-      <button type="button" class="admin-only hidden" data-view="nodes"><span>节点</span></button>
-      <button type="button" class="admin-only hidden" data-view="settings"><span>配置</span></button>
+      <button type="button" class="admin-only hidden" data-view="config"><span>配置模块</span></button>
       <button type="button" class="admin-only hidden" data-view="tickets"><span>工单帮助</span></button>
     </nav>
 

@@ -573,17 +573,26 @@ async function handleDynamicSubmit(event) {
   }
 }
 
+const CONFIG_VIEWS = ["config", "configNodes", "configSystem", "configCheckin", "configTutorials", "configPlans", "configPanels"];
+const ADMIN_VIEWS = ["admin", "rechargeCards", ...CONFIG_VIEWS];
+const LEGACY_ADMIN_VIEW_ALIASES = { nodes: "configNodes", settings: "configSystem" };
+
 function setView(view) {
+  view = LEGACY_ADMIN_VIEW_ALIASES[view] || view;
   if (!state.me && view === "home") view = "storefront";
   if (["account", "balance", "profile", "tickets", "checkout"].includes(view) && !state.me) {
     openAuth("login");
     return;
   }
-  if (["admin", "nodes", "settings", "rechargeCards"].includes(view) && state.me?.role !== "admin") {
+  if (ADMIN_VIEWS.includes(view) && state.me?.role !== "admin") {
     view = "home";
   }
   state.view = view;
-  $$('[data-view]').forEach((btn) => btn.classList.toggle("active", btn.dataset.view === view));
+  const navView = CONFIG_VIEWS.includes(view) ? "config" : view;
+  $$('[data-view]').forEach((btn) => {
+    const isPrimaryNav = Boolean(btn.closest(".nav, #mobileNav"));
+    btn.classList.toggle("active", btn.dataset.view === view || (isPrimaryNav && btn.dataset.view === navView));
+  });
   $$(".view").forEach((node) => node.classList.add("hidden"));
   const target = $(`#${view}View`);
   if (target) target.classList.remove("hidden");
@@ -1642,7 +1651,7 @@ async function handleDocumentClick(event) {
     const panelId = action.dataset.fetchInbounds === "selected" ? $("#nodePanel").value : action.dataset.fetchInbounds;
     if (action.dataset.fetchInbounds !== "selected") {
       $("#nodePanel").value = panelId;
-      setView("nodes");
+      setView("configNodes");
     }
     const count = await fetchInboundsForPanel(panelId);
     showNotice(`已拉取 ${count} 个入站`);
@@ -1660,12 +1669,12 @@ async function handleDocumentClick(event) {
   }
   if (action.dataset.editNode) {
     fillForm($("#nodeForm"), state.nodes.find((item) => String(item.id) === action.dataset.editNode));
-    setView("nodes");
+    setView("configNodes");
   }
   if (action.dataset.editTutorial) {
     const tutorial = state.adminTutorials.find((item) => String(item.id) === action.dataset.editTutorial);
     fillForm($("#tutorialForm"), tutorial);
-    setView("settings");
+    setView("configTutorials");
     $("#tutorialForm")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   if (action.dataset.resetTutorialForm !== undefined) {

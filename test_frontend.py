@@ -335,7 +335,7 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('id="rechargeCardForm"', index_html)
         self.assertIn('id="rechargeCardList"', index_html)
         recharge_start = index_html.index('id="rechargeCardsView"')
-        recharge_block = index_html[recharge_start:index_html.index('id="nodesView"', recharge_start)]
+        recharge_block = index_html[recharge_start:index_html.index('id="configView"', recharge_start)]
         admin_start = index_html.index('id="adminView"')
         admin_block = index_html[admin_start:index_html.index('id="rechargeCardsView"', admin_start)]
         self.assertIn('id="rechargeCardForm"', recharge_block)
@@ -347,6 +347,33 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("generatedCardCodes", app_js)
         self.assertIn('.recharge-admin-panel .inline-form', app_css)
         self.assertIn('grid-column: 1 / -1', app_css)
+
+    def test_admin_configuration_sections_are_split_into_module_pages(self):
+        root = Path(__file__).resolve().parents[0]
+        app_js = (root / "app.js").read_text(encoding="utf-8")
+        index_html = (root / "index.html").read_text(encoding="utf-8")
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn('data-view="config"><span>配置模块</span>', index_html)
+        self.assertNotIn('data-view="nodes"><span>节点配置</span>', index_html)
+        self.assertNotIn('data-view="settings"><span>配置</span>', index_html)
+        for view_id in [
+            "configView",
+            "configNodesView",
+            "configSystemView",
+            "configCheckinView",
+            "configTutorialsView",
+            "configPlansView",
+            "configPanelsView",
+        ]:
+            self.assertIn(f'id="{view_id}"', index_html)
+        for view in ["configNodes", "configSystem", "configCheckin", "configTutorials", "configPlans", "configPanels"]:
+            self.assertIn(f'data-view="{view}"', index_html)
+        self.assertIn("CONFIG_VIEWS", app_js)
+        self.assertIn("LEGACY_ADMIN_VIEW_ALIASES", app_js)
+        self.assertIn('setView("configNodes")', app_js)
+        self.assertIn('setView("configTutorials")', app_js)
+        self.assertIn(".config-module-grid", app_css)
 
     def test_checkin_uses_lightweight_button_state_without_global_loader(self):
         root = Path(__file__).resolve().parents[0]
@@ -383,4 +410,3 @@ class SplitFrontendConfigTests(unittest.TestCase):
         self.assertIn('credentials: API_BASE_URL ? "include" : "same-origin"', app_js)
         self.assertIn('href="./app.css"', index_html)
         self.assertIn('src="./app.js"', index_html)
-

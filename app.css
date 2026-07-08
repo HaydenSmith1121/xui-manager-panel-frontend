@@ -10573,8 +10573,7 @@ body.is-authed .nav .nav-item[data-view="nodeStatus"] { order: 3; }
 body.is-authed .nav .nav-item[data-view="guide"] { order: 4; }
 body.is-authed .nav .nav-item[data-view="admin"] { order: 10; }
 body.is-authed .nav .nav-item[data-view="rechargeCards"] { order: 11; }
-body.is-authed .nav .nav-item[data-view="nodes"] { order: 12; }
-body.is-authed .nav .nav-item[data-view="settings"] { order: 13; }
+body.is-authed .nav .nav-item[data-view="config"] { order: 12; }
 body.is-authed .nav .nav-item[data-view="tickets"] { order: 99; }
 
 body.is-authed #mobileNav {
@@ -10587,9 +10586,73 @@ body.is-authed #mobileNav button[data-view="nodeStatus"] { order: 3; }
 body.is-authed #mobileNav button[data-view="guide"] { order: 4; }
 body.is-authed #mobileNav button[data-view="admin"] { order: 10; }
 body.is-authed #mobileNav button[data-view="rechargeCards"] { order: 11; }
-body.is-authed #mobileNav button[data-view="nodes"] { order: 12; }
-body.is-authed #mobileNav button[data-view="settings"] { order: 13; }
+body.is-authed #mobileNav button[data-view="config"] { order: 12; }
 body.is-authed #mobileNav button[data-view="tickets"] { order: 99; }
+
+.config-workspace .page-heading,
+.config-detail-workspace .page-heading {
+  margin-bottom: clamp(18px, 3vw, 28px);
+}
+
+.config-module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(14px, 2vw, 22px);
+}
+
+.config-module-card {
+  appearance: none;
+  min-height: 132px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.88));
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(18px, 2.4vw, 24px);
+  text-align: left;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.08);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.config-module-card:hover,
+.config-module-card:focus-visible {
+  border-color: rgba(37, 99, 235, 0.36);
+  box-shadow: 0 22px 54px rgba(37, 99, 235, 0.14);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.config-module-card span {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.config-module-card small {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.config-detail-workspace .page-heading .ghost {
+  align-self: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .config-detail-workspace .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .config-detail-workspace .page-heading .ghost {
+    align-self: flex-start;
+  }
+}
 
 @media (max-width: 980px) {
   body.is-authed #storefrontView .guest-topbar {
