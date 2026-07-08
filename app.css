@@ -13681,16 +13681,75 @@ body.is-authed #balanceView .transaction-panel .form-intro {
   display: none !important;
 }
 
-/* Final override: keep the public header pinned above later responsive patches. */
+/* Final override: keep the public header fixed above later responsive patches. */
+body.is-guest {
+  --guest-topbar-height: 72px;
+}
+
+body.is-guest #storefrontView.storefront {
+  padding-top: var(--guest-topbar-height) !important;
+}
+
 body.is-guest #storefrontView > .guest-topbar,
 body.is-guest .storefront > .guest-topbar,
 body.is-guest .guest-topbar {
-  position: sticky !important;
+  position: fixed !important;
+  inset: 0 0 auto 0 !important;
   top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
   z-index: 1200 !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: var(--guest-topbar-height) !important;
+  min-height: var(--guest-topbar-height) !important;
+  margin: 0 !important;
+  padding-left: clamp(22px, 4vw, 48px) !important;
+  padding-right: clamp(22px, 4vw, 48px) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 8px 24px rgba(12, 41, 80, 0.08) !important;
+}
+
+body.is-guest .guest-topbar::before {
+  display: none !important;
 }
 
 body.is-guest #storefrontView,
 body.is-guest .storefront {
   overflow: visible !important;
+}
+
+body.is-guest #guestHero,
+body.is-guest #plansSection,
+body.is-guest #guestClients,
+body.is-guest #guestFlow {
+  scroll-margin-top: calc(var(--guest-topbar-height) + 18px);
+}
+
+@media (max-width: 900px) {
+  body.is-guest #storefrontView > .guest-topbar,
+  body.is-guest .storefront > .guest-topbar,
+  body.is-guest .guest-topbar {
+    grid-template-columns: auto 1fr auto !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.is-guest {
+    --guest-topbar-height: 58px;
+  }
+
+  body.is-guest #storefrontView > .guest-topbar,
+  body.is-guest .storefront > .guest-topbar,
+  body.is-guest .guest-topbar {
+    grid-template-columns: 1fr auto !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  body.is-guest .guest-nav {
+    display: none !important;
+  }
 }

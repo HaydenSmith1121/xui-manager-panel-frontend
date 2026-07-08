@@ -26,6 +26,18 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('dialog.classList.add("dialog-fallback-open")', app_js)
         self.assertIn(".dialog-fallback-open", app_css)
 
+    def test_public_storefront_header_navigation_is_fixed_for_guests(self):
+        root = Path(__file__).resolve().parents[0]
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Final override: keep the public header fixed", app_css)
+        self.assertIn("--guest-topbar-height: 72px", app_css)
+        self.assertIn("body.is-guest #storefrontView.storefront", app_css)
+        self.assertIn("position: fixed !important", app_css)
+        self.assertIn("inset: 0 0 auto 0 !important", app_css)
+        self.assertIn("body.is-guest .guest-topbar::before", app_css)
+        self.assertIn("scroll-margin-top: calc(var(--guest-topbar-height) + 18px)", app_css)
+
     def test_public_storefront_and_authentication_are_separate(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")
