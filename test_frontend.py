@@ -96,12 +96,18 @@ class FrontendTests(unittest.TestCase):
         desktop_nav = index_html[desktop_nav_start:index_html.index('</nav>', desktop_nav_start)]
         self.assertNotIn('data-view="home"><span>首页</span>', desktop_nav)
         self.assertIn('data-view="storefront"><span>套餐中心</span>', desktop_nav)
+        for label in ['套餐中心', '我的订阅', '我的余额', '可用节点', '导入教程', '工单帮助', '用户管理', '卡密管理', '配置模块']:
+            self.assertIn(label, desktop_nav)
+            self.assertEqual(len(label), 4)
         self.assertIn('class="brand brand-button" type="button" data-view="home"', index_html)
 
         mobile_nav_start = index_html.index('id="mobileNav"')
         mobile_nav = index_html[mobile_nav_start:index_html.index('</nav>', mobile_nav_start)]
         self.assertNotIn('data-view="home"><span>首页</span>', mobile_nav)
         self.assertIn('data-view="storefront"><span>套餐中心</span>', mobile_nav)
+        for label in ['套餐中心', '我的订阅', '我的余额', '可用节点', '导入教程', '工单帮助', '用户管理', '卡密管理', '配置模块']:
+            self.assertIn(label, mobile_nav)
+            self.assertEqual(len(label), 4)
 
         self.assertIn('view: "home"', app_js)
         self.assertIn('view = "home"', app_js)

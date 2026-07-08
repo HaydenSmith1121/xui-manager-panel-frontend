@@ -50,8 +50,8 @@ const UI_LANGUAGE = {
       nodeStatus: "可用节点",
       guide: "导入教程",
       tickets: "工单帮助",
-      admin: "用户",
-      rechargeCards: "充值卡",
+      admin: "用户管理",
+      rechargeCards: "卡密管理",
       config: "配置模块",
     },
     guest: {
