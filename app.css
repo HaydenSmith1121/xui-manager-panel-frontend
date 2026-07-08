@@ -14688,3 +14688,47 @@ html[data-theme="dark"] body.is-authed #ticketsView .ticket-empty-conversation s
     max-width: 92% !important;
   }
 }
+
+/* Authenticated utility pages: remove side gutters */
+body.is-authed #nodeStatusView.node-status-workspace,
+body.is-authed #guideView.guide-workspace,
+body.is-authed #ticketsView.tickets-workspace {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+body.is-authed #nodeStatusView .page-heading,
+body.is-authed #guideView .guide-page-heading,
+body.is-authed #ticketsView .ticket-workbench,
+body.is-authed #nodeStatusView #nodeStatusList,
+body.is-authed #guideView #publicTutorialList.tutorial-list,
+body.is-authed #guideView .tutorial-list,
+body.is-authed #guideView .guide-grid,
+body.is-authed #ticketsView .ticket-chat-shell {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
+body.is-authed #ticketsView .ticket-workbench {
+  justify-self: stretch !important;
+}
+
+body.is-authed #nodeStatusView.node-status-workspace,
+body.is-authed #guideView.guide-workspace {
+  padding-inline: clamp(18px, 2.4vw, 34px) !important;
+}
+
+body.is-authed #ticketsView.tickets-workspace {
+  padding-inline: clamp(18px, 2.4vw, 34px) !important;
+}
+
+@media (max-width: 900px) {
+  body.is-authed #nodeStatusView.node-status-workspace,
+  body.is-authed #guideView.guide-workspace,
+  body.is-authed #ticketsView.tickets-workspace {
+    padding-inline: 16px !important;
+  }
+}

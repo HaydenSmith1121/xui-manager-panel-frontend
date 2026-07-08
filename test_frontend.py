@@ -539,6 +539,23 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("transform: none !important", app_css)
         self.assertIn("will-change: opacity", app_css)
 
+    def test_utility_pages_fill_available_main_width(self):
+        app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Authenticated utility pages: remove side gutters", app_css)
+        for selector in [
+            "body.is-authed #nodeStatusView.node-status-workspace",
+            "body.is-authed #guideView.guide-workspace",
+            "body.is-authed #ticketsView.tickets-workspace",
+        ]:
+            self.assertIn(selector, app_css)
+        self.assertIn("margin-inline: 0 !important", app_css)
+        self.assertIn("width: 100% !important", app_css)
+        self.assertIn("max-width: none !important", app_css)
+        self.assertIn("body.is-authed #ticketsView .ticket-workbench", app_css)
+        self.assertIn("body.is-authed #guideView #publicTutorialList.tutorial-list", app_css)
+        self.assertIn("body.is-authed #nodeStatusView #nodeStatusList", app_css)
+
     def test_menu_view_switches_use_no_position_animation(self):
         root = Path(__file__).resolve().parents[0]
         app_css = (root / "app.css").read_text(encoding="utf-8")
