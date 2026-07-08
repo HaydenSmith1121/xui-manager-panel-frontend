@@ -417,6 +417,17 @@ class FrontendTests(unittest.TestCase):
         self.assertIn(".admin-ticket-conversation", app_css)
         self.assertIn(".admin-ticket-bubble", app_css)
 
+    def test_node_status_menu_switch_does_not_shift_page_sideways(self):
+        root = Path(__file__).resolve().parents[0]
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("scrollbar-gutter: stable", app_css)
+        self.assertIn("overflow-y: scroll", app_css)
+        self.assertIn("#nodeStatusView.view", app_css)
+        self.assertIn("animation: node-status-view-fade", app_css)
+        self.assertIn("transform: none !important", app_css)
+        self.assertIn("will-change: opacity", app_css)
+
 
 if __name__ == "__main__":
     unittest.main()

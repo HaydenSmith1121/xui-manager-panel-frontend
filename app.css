@@ -6296,6 +6296,29 @@ body.is-guest .storefront {
   overflow: visible !important;
 }
 
+/* Stabilize page width during admin view switches so node status does not drift sideways. */
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* Node status already has a dense workspace; keep entry subtle without positional movement. */
+#nodeStatusView.view {
+  animation: node-status-view-fade 180ms ease-out both !important;
+  transform: none !important;
+  will-change: opacity !important;
+}
+
+@keyframes node-status-view-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .recharge-admin-panel .inline-form,
 .user-ticket-reply-form {
   grid-template-columns: repeat(2, minmax(0, 1fr));
