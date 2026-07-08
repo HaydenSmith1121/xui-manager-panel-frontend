@@ -14205,3 +14205,46 @@ html[data-theme="dark"] body.is-guest .guest-final-cta .guest-auth-actions butto
     line-height: 1 !important;
   }
 }
+
+/* Mobile guest polish: remove extra header and flow shadows */
+@media (max-width: 760px) {
+  body.is-guest #storefrontView > .guest-topbar,
+  body.is-guest .storefront > .guest-topbar,
+  body.is-guest .guest-topbar {
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(189, 219, 247, 0.72) !important;
+  }
+
+  body.is-guest .guest-brand,
+  body.is-guest .guest-brand .brand-mark,
+  body.is-guest .guest-brand .brand-mark img,
+  body.is-guest .guest-brand .brand-mark svg {
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  body.is-guest .flow-timeline.flow-path,
+  body.is-guest .flow-path .flow-timeline-item,
+  body.is-guest .flow-step,
+  body.is-guest .flow-step-badge,
+  body.is-guest .flow-step-visual,
+  body.is-guest .flow-step-arrow,
+  body.is-guest .flow-step-arrow::before {
+    box-shadow: none !important;
+    filter: none !important;
+    text-shadow: none !important;
+  }
+
+  body.is-guest .flow-step-arrow {
+    display: grid !important;
+    place-items: center !important;
+    font-size: 0 !important;
+    transform: none !important;
+  }
+
+  body.is-guest .flow-step-arrow::before {
+    content: "↓" !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+  }
+}

@@ -83,6 +83,17 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("height: 34px !important", app_css)
         self.assertIn("font-size: 12px !important", app_css)
 
+    def test_mobile_guest_header_and_flow_shadows_are_removed(self):
+        app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Mobile guest polish: remove extra header and flow shadows", app_css)
+        self.assertIn("body.is-guest .guest-brand .brand-mark", app_css)
+        self.assertIn("body.is-guest .flow-step-arrow::before", app_css)
+        self.assertIn("box-shadow: none !important", app_css)
+        self.assertIn("filter: none !important", app_css)
+        self.assertIn("text-shadow: none !important", app_css)
+        self.assertIn("background: transparent !important", app_css)
+
     def test_public_storefront_and_authentication_are_separate(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")
