@@ -14916,3 +14916,286 @@ body.is-authed {
     z-index: 1400 !important;
   }
 }
+
+/* Dark mode full-pass polish: restore contrast on the landing page and shared UI. */
+html[data-theme="dark"] {
+  --ink: #f4f8ff;
+  --ink-soft: #d8e6fb;
+  --muted: #a9bad4;
+  --blue: #5ea2ff;
+  --blue-dark: #9fc9ff;
+  --accent-cyan: #6ee7ff;
+  --surface: #101b2d;
+  --line: rgba(148, 163, 184, 0.28);
+}
+
+html[data-theme="dark"] body.is-guest {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(37, 99, 235, 0.34), transparent 34%),
+    radial-gradient(circle at 84% 24%, rgba(20, 184, 166, 0.2), transparent 30%),
+    linear-gradient(180deg, #08111f 0%, #0b1626 48%, #07101d 100%) !important;
+}
+
+html[data-theme="dark"] .guest-topbar {
+  background: rgba(11, 18, 32, 0.9) !important;
+  border-bottom-color: rgba(96, 165, 250, 0.22) !important;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28) !important;
+}
+
+html[data-theme="dark"] .guest-brand,
+html[data-theme="dark"] .brand-button,
+html[data-theme="dark"] .brand strong,
+html[data-theme="dark"] .guest-brand strong {
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] .brand small,
+html[data-theme="dark"] .guest-brand small {
+  color: #9fb4d3 !important;
+}
+
+html[data-theme="dark"] .guest-nav button,
+html[data-theme="dark"] .guest-auth-actions .ghost,
+html[data-theme="dark"] .toolbar-chip {
+  background: rgba(17, 29, 49, 0.72) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #dbeafe !important;
+}
+
+html[data-theme="dark"] .guest-nav button:hover,
+html[data-theme="dark"] .guest-nav button:focus-visible,
+html[data-theme="dark"] .guest-auth-actions .ghost:hover,
+html[data-theme="dark"] .guest-auth-actions .ghost:focus-visible,
+html[data-theme="dark"] .toolbar-chip:hover,
+html[data-theme="dark"] .toolbar-chip:focus-visible {
+  background: rgba(37, 99, 235, 0.28) !important;
+  border-color: rgba(103, 232, 249, 0.38) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .guest-auth-actions button:not(.ghost) {
+  background: linear-gradient(135deg, #15336a, #0f2a58) !important;
+  color: #f8fbff !important;
+  box-shadow: 0 16px 38px rgba(37, 99, 235, 0.2) !important;
+}
+
+html[data-theme="dark"] .guest-hero,
+html[data-theme="dark"] .hero {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(37, 99, 235, 0.28), transparent 30%),
+    radial-gradient(circle at 84% 18%, rgba(14, 165, 233, 0.18), transparent 32%),
+    linear-gradient(135deg, #0a1424 0%, #0c1b31 48%, #07121f 100%) !important;
+}
+
+html[data-theme="dark"] body.is-guest #guestHeroTitle,
+html[data-theme="dark"] body.is-guest .guest-hero-copy h1,
+html[data-theme="dark"] .hero h1 {
+  color: #f8fbff !important;
+  text-shadow: 0 18px 46px rgba(0, 0, 0, 0.42), 0 0 30px rgba(96, 165, 250, 0.22) !important;
+}
+
+html[data-theme="dark"] body.is-guest #guestHeroTitle span,
+html[data-theme="dark"] .hero h1 span {
+  color: #7dd3fc !important;
+}
+
+html[data-theme="dark"] .guest-hero-copy > p:not(.eyebrow),
+html[data-theme="dark"] .hero-lede {
+  color: #b8c8df !important;
+}
+
+html[data-theme="dark"] .eyebrow {
+  color: #7dd3fc !important;
+}
+
+html[data-theme="dark"] .hero-benefit-card {
+  background: rgba(226, 238, 255, 0.92) !important;
+  border-color: rgba(219, 234, 254, 0.72) !important;
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.28) !important;
+}
+
+html[data-theme="dark"] .hero-benefit-card strong {
+  color: #10213b !important;
+}
+
+html[data-theme="dark"] .hero-benefit-card small {
+  color: #1d4ed8 !important;
+}
+
+html[data-theme="dark"] .hero-client-orbit,
+html[data-theme="dark"] .client-tools-row article,
+html[data-theme="dark"] .client-device-grid article,
+html[data-theme="dark"] .flow-path,
+html[data-theme="dark"] .flow-path-item,
+html[data-theme="dark"] .compact-plan-card,
+html[data-theme="dark"] .plan-card,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .list-panel,
+html[data-theme="dark"] .row-card,
+html[data-theme="dark"] .tutorial-card,
+html[data-theme="dark"] .node-status-card,
+html[data-theme="dark"] .guide-card,
+html[data-theme="dark"] .ticket-card,
+html[data-theme="dark"] .recharge-card,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .account-hero-panel,
+html[data-theme="dark"] .balance-hero-panel,
+html[data-theme="dark"] .profile-hero {
+  background: linear-gradient(180deg, rgba(17, 29, 49, 0.96), rgba(10, 20, 36, 0.94)) !important;
+  border-color: rgba(99, 144, 210, 0.34) !important;
+  color: #f2f7ff !important;
+  box-shadow: 0 22px 64px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark"] .compact-plan-card h3,
+html[data-theme="dark"] .plan-card h3,
+html[data-theme="dark"] .client-device-grid strong,
+html[data-theme="dark"] .client-tools-row strong,
+html[data-theme="dark"] .flow-path-copy strong,
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .page-heading h1,
+html[data-theme="dark"] .profile-hero h1,
+html[data-theme="dark"] .panel h2,
+html[data-theme="dark"] .row-card h3 {
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] .plan-description,
+html[data-theme="dark"] .flow-path-copy p,
+html[data-theme="dark"] .client-device-grid span,
+html[data-theme="dark"] .tutorial-card p,
+html[data-theme="dark"] .guide-card p,
+html[data-theme="dark"] .ticket-card p,
+html[data-theme="dark"] .profile-hero p,
+html[data-theme="dark"] .section-heading > p,
+html[data-theme="dark"] .page-heading p {
+  color: #a9bad4 !important;
+}
+
+html[data-theme="dark"] .plan-price,
+html[data-theme="dark"] .plan-quota,
+html[data-theme="dark"] .client-device-grid p,
+html[data-theme="dark"] .product-type-badge,
+html[data-theme="dark"] .gift-card-balance strong {
+  color: #8dccff !important;
+}
+
+html[data-theme="dark"] .plan-meta span,
+html[data-theme="dark"] .plan-facts span,
+html[data-theme="dark"] .device-icon,
+html[data-theme="dark"] .flow-path-icon,
+html[data-theme="dark"] .client-logo,
+html[data-theme="dark"] .client-tool,
+html[data-theme="dark"] .status-pill,
+html[data-theme="dark"] .pill {
+  background: rgba(8, 17, 31, 0.82) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #dbeafe !important;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] .card-code,
+html[data-theme="dark"] code,
+html[data-theme="dark"] pre {
+  background: rgba(5, 12, 24, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+  color: #f3f8ff !important;
+}
+
+html[data-theme="dark"] table,
+html[data-theme="dark"] th,
+html[data-theme="dark"] td {
+  color: #e8f1ff !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+}
+
+html[data-theme="dark"] th {
+  background: rgba(15, 23, 42, 0.9) !important;
+}
+
+html[data-theme="dark"] .ghost,
+html[data-theme="dark"] button.ghost {
+  background: rgba(30, 41, 59, 0.86) !important;
+  color: #dbeafe !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] button.danger {
+  background: rgba(127, 29, 29, 0.42) !important;
+  color: #fecaca !important;
+}
+
+html[data-theme="dark"] .storefront-footer,
+html[data-theme="dark"] .guest-final-cta {
+  background: linear-gradient(135deg, #0b1526, #15346d 58%, #1d4ed8) !important;
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] .storefront-footer p,
+html[data-theme="dark"] .guest-final-cta p {
+  color: #c4d4ea !important;
+}
+
+/* Dark mode auth modal polish: keep login/register tabs readable. */
+html[data-theme="dark"] .auth-shell {
+  background: linear-gradient(180deg, rgba(16, 27, 47, 0.98), rgba(10, 18, 34, 0.98)) !important;
+  border-color: rgba(96, 165, 250, 0.24) !important;
+  color: #f4f8ff !important;
+  box-shadow: 0 34px 96px rgba(0, 0, 0, 0.46) !important;
+}
+
+html[data-theme="dark"] .auth-brand h2 {
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] .auth-brand > p:last-child,
+html[data-theme="dark"] .auth-help-line {
+  color: #9fb2ce !important;
+}
+
+html[data-theme="dark"] .auth-tabs {
+  background: rgba(5, 12, 24, 0.72) !important;
+  border: 1px solid rgba(96, 165, 250, 0.22) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03) !important;
+}
+
+html[data-theme="dark"] .auth-tabs button {
+  background: transparent !important;
+  color: #9fb2ce !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .auth-tabs button:hover,
+html[data-theme="dark"] .auth-tabs button:focus-visible {
+  background: rgba(37, 99, 235, 0.18) !important;
+  color: #e8f3ff !important;
+}
+
+html[data-theme="dark"] .auth-tabs button.active {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.26), rgba(56, 189, 248, 0.18)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22) !important;
+}
+
+html[data-theme="dark"] .dialog-close {
+  background: rgba(226, 238, 255, 0.92) !important;
+  color: #64748b !important;
+}
+
+html[data-theme="dark"] .dialog-close:hover,
+html[data-theme="dark"] .dialog-close:focus-visible {
+  background: #ffffff !important;
+  color: #1e3a5f !important;
+}
+
+html[data-theme="dark"] .password-toggle {
+  color: #9fc9ff !important;
+}
+
+html[data-theme="dark"] .password-toggle:hover,
+html[data-theme="dark"] .password-toggle:focus-visible {
+  background: rgba(37, 99, 235, 0.2) !important;
+  color: #ffffff !important;
+}
