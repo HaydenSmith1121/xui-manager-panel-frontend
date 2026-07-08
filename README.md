@@ -115,6 +115,27 @@ bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-
 
 升级脚本会拉取最新代码、重写 `config.js`、校验并重载 Nginx。
 
+### 现有服务器推荐升级命令
+
+如果后端服务监听 `127.0.0.1:25889`，前端 Nginx 对外监听 `25888`，每次升级前端都建议显式传入端口，避免脚本默认值或历史环境变量把 `/api/` 代理到错误端口。
+
+~~~bash
+export FRONTEND_LISTEN_PORT=25888
+export BACKEND_UPSTREAM=http://127.0.0.1:25889
+export ENABLE_BACKEND_PROXY=1
+export API_BASE_URL=
+
+bash <(curl -fsSL https://raw.githubusercontent.com/HaydenSmith1121/xui-manager-panel-frontend/main/deploy/upgrade.sh)
+
+nginx -t
+systemctl reload nginx
+ss -lntp | grep -E '25888|25889'
+curl -I http://127.0.0.1:25888/
+curl -i http://127.0.0.1:25888/api/plans
+~~~
+
+正常情况下，`25888` 应由 Nginx 监听，`25889` 应由后端服务监听；`/api/plans` 不应返回 502。
+
 ## 卸载
 
 仅移除 Nginx 站点配置，保留前端文件：
