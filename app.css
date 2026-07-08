@@ -2157,6 +2157,23 @@ dialog.dialog-fallback-open {
   z-index: 1;
 }
 
+.checkin-panel [data-checkin].is-loading {
+  color: transparent;
+  pointer-events: none;
+}
+
+.checkin-panel [data-checkin].is-loading::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 8px) auto auto calc(50% - 8px);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .48);
+  border-top-color: #fff;
+  animation: spin .72s linear infinite;
+}
+
 .checkin-recent-list {
   position: relative;
   z-index: 1;
@@ -12040,6 +12057,21 @@ body.is-authed .checkin-icon-action {
   background: rgba(255, 255, 255, .82) !important;
   border: 1px solid rgba(18, 108, 255, .28) !important;
   box-shadow: 0 12px 24px rgba(18, 108, 255, .13) !important;
+}
+
+body.is-authed .checkin-icon-action.is-loading {
+  color: transparent !important;
+  pointer-events: none !important;
+}
+
+body.is-authed .checkin-icon-action.is-loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(18, 108, 255, .22);
+  border-top-color: #126cff;
+  animation: spin .72s linear infinite;
 }
 
 body.is-authed .checkin-icon-action span {

@@ -73,8 +73,8 @@ function endLoading() {
 }
 
 async function api(path, options = {}) {
-  const { loadingLabel = "正在处理", ...fetchOptions } = options;
-  beginLoading(loadingLabel);
+  const { loadingLabel = "正在处理", silent = false, ...fetchOptions } = options;
+  if (!silent) beginLoading(loadingLabel);
   try {
     const res = await fetch(apiUrl(path), {
       headers: { "Content-Type": "application/json" },
@@ -85,7 +85,7 @@ async function api(path, options = {}) {
     if (!res.ok) throw new Error(data.error || `请求失败: ${res.status}`);
     return data;
   } finally {
-    endLoading();
+    if (!silent) endLoading();
   }
 }
 
@@ -615,16 +615,30 @@ async function refreshMe() {
   const data = await api("/api/me", { loadingLabel: "正在读取账号" });
   state.me = data.user;
   if (state.me?.role === "user") {
-    await refreshBalanceTransactions();
-    await refreshCheckin();
-    await refreshTickets();
+    renderAuth();
+    scheduleUserBackgroundDataRefresh();
   } else {
     state.transactions = [];
     state.checkin = null;
     state.tickets = [];
+    renderAuth();
   }
-  renderAuth();
   if (state.me?.role === "admin") await refreshAdmin();
+}
+
+function scheduleUserBackgroundDataRefresh() {
+  if (state.me?.role !== "user") return;
+  void refreshUserBackgroundData().catch((error) => showNotice(error?.message || "账号数据刷新失败"));
+}
+
+async function refreshUserBackgroundData() {
+  if (state.me?.role !== "user") return;
+  await Promise.allSettled([
+    refreshBalanceTransactions(),
+    refreshCheckin(),
+    refreshTickets(),
+  ]);
+  renderAuth();
 }
 
 async function refreshAdmin() {
@@ -660,14 +674,14 @@ async function refreshNodeStatuses() {
 
 async function refreshCheckin() {
   if (state.me?.role !== "user") return;
-  const data = await api("/api/checkin", { loadingLabel: "正在读取签到状态" });
+  const data = await api("/api/checkin", { silent: true });
   state.checkin = data.checkin || null;
   renderCheckin();
 }
 
 async function refreshTickets() {
   if (state.me?.role !== "user") return;
-  const data = await api("/api/tickets", { loadingLabel: "正在读取工单" });
+  const data = await api("/api/tickets", { silent: true });
   state.tickets = data.tickets || [];
   renderTickets();
 }
@@ -680,7 +694,7 @@ async function refreshAdminTickets() {
 }
 
 async function refreshBalanceTransactions() {
-  const data = await api("/api/balance/transactions", { loadingLabel: "正在读取余额记录" });
+  const data = await api("/api/balance/transactions", { silent: true });
   state.transactions = data.transactions || [];
 }
 
@@ -1400,6 +1414,7 @@ async function submitPurchase() {
 async function finishAuthentication(user) {
   state.me = user;
   renderAuth();
+  if (state.me?.role === "user") scheduleUserBackgroundDataRefresh();
   if (state.me?.role === "admin") await refreshAdmin();
   closeAuth(false);
   if (state.pendingPlanId && state.me?.role === "user") setView("checkout");
@@ -1481,11 +1496,23 @@ async function handleDocumentClick(event) {
   }
 
   if (target.closest("[data-checkin]")) {
-    const data = await api("/api/checkin", { method: "POST", body: "{}", loadingLabel: "正在签到" });
-    state.me = data.user;
-    state.checkin = data.checkin;
-    renderAuth();
-    showNotice("签到成功，获得 " + formatBytes(data.reward_bytes) + " 流量");
+    const button = target.closest("[data-checkin]");
+    const buttons = $$("[data-checkin]");
+    if (button.disabled || buttons.some((item) => item.classList.contains("is-loading"))) return;
+    buttons.forEach((item) => {
+      item.disabled = true;
+      item.classList.add("is-loading");
+    });
+    try {
+      const data = await api("/api/checkin", { method: "POST", body: "{}", silent: true });
+      state.me = data.user;
+      state.checkin = data.checkin;
+      renderAuth();
+      showNotice("签到成功，获得 " + formatBytes(data.reward_bytes) + " 流量");
+    } finally {
+      buttons.forEach((item) => item.classList.remove("is-loading"));
+      renderCheckin();
+    }
     return;
   }
 

@@ -348,6 +348,25 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('.recharge-admin-panel .inline-form', app_css)
         self.assertIn('grid-column: 1 / -1', app_css)
 
+    def test_checkin_uses_lightweight_button_state_without_global_loader(self):
+        root = Path(__file__).resolve().parents[0]
+        app_js = (root / "app.js").read_text(encoding="utf-8")
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("silent = false", app_js)
+        self.assertIn("if (!silent) beginLoading(loadingLabel)", app_js)
+        self.assertIn('api("/api/checkin", { method: "POST", body: "{}", silent: true })', app_js)
+        self.assertIn("item.classList.add(\"is-loading\")", app_js)
+        self.assertIn("item.classList.remove(\"is-loading\")", app_js)
+        self.assertIn("refreshUserBackgroundData", app_js)
+        self.assertIn("function scheduleUserBackgroundDataRefresh", app_js)
+        self.assertIn("void refreshUserBackgroundData().catch", app_js)
+        self.assertIn('const buttons = $$("[data-checkin]")', app_js)
+        self.assertIn("buttons.forEach", app_js)
+        self.assertIn("Promise.allSettled", app_js)
+        self.assertIn(".checkin-icon-action.is-loading::after", app_css)
+        self.assertIn(".checkin-panel [data-checkin].is-loading::after", app_css)
+
 
 if __name__ == "__main__":
     unittest.main()
