@@ -14068,6 +14068,68 @@ html[data-theme="dark"] .account-hero {
   border-color: var(--line) !important;
 }
 
+html[data-theme="dark"] body.is-guest #storefrontView.storefront,
+html[data-theme="dark"] body.is-guest .guest-plans,
+html[data-theme="dark"] body.is-guest .guest-clients,
+html[data-theme="dark"] body.is-guest .guest-flow,
+html[data-theme="dark"] body.is-guest .guest-section,
+html[data-theme="dark"] body.is-guest .guest-module {
+  background:
+    radial-gradient(circle at 16% 4%, rgba(37, 99, 235, 0.2), transparent 32%),
+    radial-gradient(circle at 84% 24%, rgba(103, 232, 249, 0.1), transparent 30%),
+    #08111f !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] body.is-guest .guest-section-heading h2,
+html[data-theme="dark"] body.is-guest .guest-final-cta h2,
+html[data-theme="dark"] body.is-guest .compact-plan-card h3,
+html[data-theme="dark"] body.is-guest .plan-card h3 {
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] body.is-guest .guest-section-heading p,
+html[data-theme="dark"] body.is-guest .guest-final-cta p,
+html[data-theme="dark"] body.is-guest .compact-plan-card .plan-description,
+html[data-theme="dark"] body.is-guest .plan-card .plan-description,
+html[data-theme="dark"] body.is-guest .compact-plan-card .plan-price span,
+html[data-theme="dark"] body.is-guest .plan-facts small {
+  color: #9fb2ce !important;
+}
+
+html[data-theme="dark"] body.is-guest .compact-plan-card,
+html[data-theme="dark"] body.is-guest .plan-card,
+html[data-theme="dark"] body.is-guest .plan-card:first-child,
+html[data-theme="dark"] body.is-guest .client-support-panel,
+html[data-theme="dark"] body.is-guest .client-platform-strip,
+html[data-theme="dark"] body.is-guest .flow-step,
+html[data-theme="dark"] body.is-guest .guest-final-cta {
+  background:
+    linear-gradient(180deg, rgba(18, 30, 50, 0.96), rgba(10, 20, 36, 0.94)) !important;
+  border-color: rgba(99, 144, 210, 0.34) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34) !important;
+  color: var(--ink) !important;
+}
+
+html[data-theme="dark"] body.is-guest .compact-plan-card .plan-facts span,
+html[data-theme="dark"] body.is-guest .plan-meta span,
+html[data-theme="dark"] body.is-guest .client-tool,
+html[data-theme="dark"] body.is-guest .client-logo,
+html[data-theme="dark"] body.is-guest .flow-step-badge {
+  background: rgba(8, 17, 31, 0.82) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: #dbeafe !important;
+}
+
+html[data-theme="dark"] body.is-guest .compact-plan-card button,
+html[data-theme="dark"] body.is-guest .guest-hero .hero-actions button,
+html[data-theme="dark"] body.is-guest .guest-final-cta .guest-auth-actions button {
+  background: linear-gradient(135deg, #2563eb, #38bdf8) !important;
+  color: #ffffff !important;
+  box-shadow: 0 18px 42px rgba(37, 99, 235, 0.34) !important;
+}
+
 @media (max-width: 760px) {
   .app-toolbar {
     top: 66px;
