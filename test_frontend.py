@@ -440,6 +440,20 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("transform: none !important", app_css)
         self.assertIn("will-change: opacity", app_css)
 
+    def test_menu_view_switches_use_no_position_animation(self):
+        root = Path(__file__).resolve().parents[0]
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+
+        view_block = app_css[app_css.index(".view {"):app_css.index("@keyframes view-enter")]
+        keyframes_block = app_css[app_css.index("@keyframes view-enter"):app_css.index(".home {", app_css.index("@keyframes view-enter"))]
+
+        self.assertIn("animation: view-enter 180ms ease-out both", view_block)
+        self.assertIn("transform: none", view_block)
+        self.assertIn("from { opacity: 0; }", keyframes_block)
+        self.assertIn("to { opacity: 1; }", keyframes_block)
+        self.assertNotIn("translateY(8px)", keyframes_block)
+        self.assertNotIn("translateY(0)", keyframes_block)
+
 
 if __name__ == "__main__":
     unittest.main()
