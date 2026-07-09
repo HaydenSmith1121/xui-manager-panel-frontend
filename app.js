@@ -15,6 +15,7 @@ const state = {
   adminTickets: [],
   activeTicketId: null,
   activeAdminTicketId: null,
+  isCreatingTicket: false,
   revealedCards: {},
   expandedUsers: new Set(),
   settings: {},
@@ -1528,13 +1529,21 @@ function renderTickets() {
   $("#ticketsView")?.classList.remove("ticket-admin-mode");
   if (state.me?.role !== "user") {
     target.innerHTML = '<span class="meta">暂无工单</span>';
+    renderTicketConversationPane(null, "user");
     return;
   }
   if (!state.tickets.length) {
     state.activeTicketId = null;
     updateTicketStats([]);
-    target.innerHTML = '<div class="ticket-empty-list"><strong>暂无工单</strong><span>左上方提交一个新问题后，会在这里显示。</span></div>';
-    renderTicketConversationPane(null, "user");
+    target.innerHTML = '<div class="ticket-empty-list"><strong>暂无工单</strong><span>点击上方“新建工单”开始反馈问题。</span></div>';
+    renderTicketConversationPane(null, state.isCreatingTicket ? "new" : "user");
+    return;
+  }
+
+  if (state.isCreatingTicket) {
+    updateTicketStats(state.tickets);
+    target.innerHTML = state.tickets.map((ticket) => ticketThreadButtonHtml(ticket, null, false)).join("");
+    renderTicketConversationPane(null, "new");
     return;
   }
 
@@ -1570,7 +1579,7 @@ function renderAdminTickets() {
 }
 
 function ticketThreadButtonHtml(ticket, activeTicket, isAdmin) {
-  const active = String(ticket.id) === String(activeTicket.id);
+  const active = activeTicket && String(ticket.id) === String(activeTicket.id);
   const selector = isAdmin ? 'data-select-admin-ticket="' + ticket.id + '"' : 'data-select-user-ticket="' + ticket.id + '"';
   const subject = '#' + ticket.id + ' ' + escapeHtml(ticket.subject || "未命名工单");
   const sender = isAdmin ? escapeHtml(ticket.user_email || "未知用户") : '我提交的工单';
@@ -1586,12 +1595,20 @@ function updateTicketStats(tickets) {
   closedNode.textContent = String(closed);
 }
 
+function ticketCreateFormHtml() {
+  return '<form id="ticketForm" class="ticket-compose-card ticket-conversation-form"><div class="ticket-panel-title"><h2>新建工单</h2><p>把节点名、设备和报错写清楚，处理会更快。</p></div><label>标题<input name="subject" maxlength="120" placeholder="例如：香港 A 节点不可用" required></label><label>问题描述<textarea name="message" rows="7" maxlength="2000" placeholder="请尽量提供客户端、节点名、报错截图文字等信息" required></textarea></label><button type="submit">提交工单</button></form>';
+}
+
 function renderTicketConversationPane(ticket, mode) {
   const pane = $("#ticketConversationPane");
   if (!pane) return;
   pane.classList.add("ticket-conversation-pane");
+  if (mode === "new") {
+    pane.innerHTML = ticketCreateFormHtml();
+    return;
+  }
   if (!ticket) {
-    pane.innerHTML = '<div class="ticket-empty-conversation"><span aria-hidden="true">💬</span><strong>' + (mode === "admin" ? '暂无待处理工单' : '选择左侧工单开始查看对话') + '</strong><p>' + (mode === "admin" ? '新的用户工单会显示在左侧会话列表。' : '工单内容、回复记录和输入框都会显示在这里。') + '</p></div>';
+    pane.innerHTML = '<div class="ticket-empty-conversation"><span aria-hidden="true">💬</span><strong>' + (mode === "admin" ? '暂无待处理工单' : '选择左侧工单开始查看对话') + '</strong><p>' + (mode === "admin" ? '新的用户工单会显示在左侧会话列表。' : '点击左侧“新建工单”提交新问题，或选择已有工单继续沟通。') + '</p></div>';
     return;
   }
   const isAdmin = mode === "admin";
@@ -1694,9 +1711,16 @@ async function handleDocumentClick(event) {
     renderAdminTickets();
     return;
   }
+  if (target.closest("[data-new-ticket]")) {
+    state.activeTicketId = null;
+    state.isCreatingTicket = true;
+    renderTickets();
+    return;
+  }
   const userTicketButton = target.closest("[data-select-user-ticket]");
   if (userTicketButton) {
     state.activeTicketId = userTicketButton.dataset.selectUserTicket;
+    state.isCreatingTicket = false;
     renderTickets();
     return;
   }
@@ -2084,13 +2108,18 @@ function bindEvents() {
     showNotice("登录成功");
   }));
 
-  $("#ticketForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  document.addEventListener("submit", (event) => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement) || form.id !== "ticketForm") return;
+    withSubmitState(event, async (form) => {
     await api("/api/tickets", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在提交工单" });
     form.reset();
+    state.isCreatingTicket = false;
     state.activeTicketId = null;
     await refreshTickets();
     showNotice("工单已提交");
-  }));
+    });
+  });
 
   $("#rechargeForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/recharge", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在兑换充值卡" });

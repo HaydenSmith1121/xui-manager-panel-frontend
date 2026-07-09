@@ -476,28 +476,13 @@
             <header class="ticket-workbench-header">
               <div>
                 <h1>工单帮助</h1>
-                <p>像聊天软件一样处理问题：左侧切换工单，右侧查看对话并回复。</p>
-              </div>
-              <div class="ticket-workbench-stats" aria-label="工单统计">
-                <span><strong id="ticketOpenCount">0</strong><small>处理中</small></span>
-                <span><strong id="ticketClosedCount">0</strong><small>已关闭</small></span>
               </div>
             </header>
             <div class="ticket-chat-shell">
-              <aside class="ticket-sidebar" aria-label="工单会话列表">
-                <form id="ticketForm" class="ticket-compose-card user-only hidden">
-                  <div class="ticket-panel-title"><h2>新建工单</h2><p>把节点名、设备和报错写清楚，处理会更快。</p></div>
-                  <label>标题<input name="subject" maxlength="120" placeholder="例如：香港 A 节点不可用" required></label>
-                  <label>问题描述<textarea name="message" rows="5" maxlength="2000" placeholder="请尽量提供客户端、节点名、报错截图文字等信息" required></textarea></label>
-                  <button type="submit">提交工单</button>
-                </form>
+              <aside class="ticket-sidebar" aria-label="我的工单列表">
                 <section class="ticket-list-panel user-only hidden">
-                  <div class="ticket-panel-title"><h2>我的工单</h2><p>选择一条会话继续沟通。</p></div>
+                  <div class="ticket-panel-title ticket-list-title"><div><h2>我的工单</h2></div><button id="newTicketBtn" type="button" class="ticket-new-button" data-new-ticket>新建工单</button></div>
                   <div id="ticketList" class="ticket-list user-conversation-list"><span class="meta">暂无工单</span></div>
-                </section>
-                <section class="ticket-list-panel admin-only hidden">
-                  <div class="ticket-panel-title"><h2>工单会话</h2><p>按用户切换，像聊天软件一样回复。</p></div>
-                  <div id="adminTicketList" class="ticket-list admin-conversation-list"><span class="meta">暂无工单</span></div>
                 </section>
               </aside>
               <section id="ticketConversationPane" class="ticket-conversation-pane" aria-live="polite">

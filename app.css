@@ -14935,6 +14935,64 @@ body.is-authed {
 }
 
 /* Dark mode full-pass polish: restore contrast on the landing page and shared UI. */
+/* Ticket help clean-up: keep the left rail focused on tickets and move creation to the workspace. */
+body.is-authed #ticketsView .ticket-workbench-header {
+  justify-content: flex-start !important;
+}
+
+body.is-authed #ticketsView .ticket-workbench-header p:not(.eyebrow),
+body.is-authed #ticketsView .ticket-workbench-stats {
+  display: none !important;
+}
+
+body.is-authed #ticketsView .ticket-sidebar {
+  grid-template-rows: minmax(0, 1fr) !important;
+}
+
+body.is-authed #ticketsView .user-only.hidden,
+body.is-authed #ticketsView .admin-only.hidden {
+  display: none !important;
+}
+
+body.is-authed #ticketsView .ticket-list-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+body.is-authed #ticketsView .ticket-new-button {
+  min-height: 34px !important;
+  width: auto !important;
+  padding: 0 13px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+}
+
+body.is-authed #ticketsView .ticket-conversation-form {
+  align-self: start !important;
+  width: min(520px, calc(100% - 48px)) !important;
+  margin: clamp(22px, 4vw, 52px) auto !important;
+  padding: 22px !important;
+}
+
+body.is-authed #ticketsView .ticket-conversation-form textarea {
+  min-height: 160px !important;
+  max-height: 260px !important;
+}
+
+@media (min-width: 761px) {
+  body.is-authed {
+    --authed-control-gap: 20px;
+  }
+
+  body.is-authed .app-toolbar {
+    max-width: calc(100vw - var(--sidebar) - var(--authed-profile-size) - var(--authed-top-control) * 2 - 42px) !important;
+  }
+}
+
 html[data-theme="dark"] {
   --ink: #f4f8ff;
   --ink-soft: #d8e6fb;
