@@ -89,6 +89,40 @@ window.XUI_MANAGER_API_BASE_URL = "https://api.example.com";
 window.XUI_MANAGER_API_BASE_URL = "";
 ~~~
 
+## Jenkins 版本发布与回滚
+
+仓库内置 `Jenkinsfile`、`deploy/jenkins-deploy.sh` 和 `deploy/rollback.sh`，用于把每次构建发布成独立版本目录，出现问题时可以从 Jenkins 直接回退。
+
+### 发布方式
+
+Jenkins 任务建议使用 Pipeline from SCM，仓库地址填写本前端仓库，脚本路径保持默认 `Jenkinsfile`。构建参数：
+
+- `ACTION=deploy`：发布当前代码为新版本。
+- `ACTION=rollback`：回滚到上一个版本，或回滚到 `TARGET_RELEASE` 指定版本。
+- `FRONTEND_SERVER_NAME`：Nginx `server_name`，例如 `haoyongjichang.top`。
+- `FRONTEND_LISTEN_PORT`：Nginx 监听端口，默认 `80`。
+- `BACKEND_UPSTREAM`：后端地址，默认 `http://127.0.0.1:25889`。
+- `KEEP_RELEASES`：保留最近几个版本，默认 `5`。
+
+### 版本目录
+
+发布后文件结构如下：
+
+~~~text
+/var/www/xui-manager-panel-frontend/
+  releases/BUILD-COMMIT/
+  current -> releases/当前版本
+  previous -> releases/上一个版本
+~~~
+
+Nginx 的 `root` 永远指向 `current` 软链接。发布失败时脚本会自动切回旧版本；手动回滚时 Jenkins 选择 `ACTION=rollback` 即可。
+
+### Jenkins sudo 权限
+
+部署机上的 Jenkins 用户需要允许免密执行发布脚本涉及的命令，至少包括 `bash`、`nginx`、`systemctl reload nginx`、`ln`、`rm` 等。建议先在测试环境跑通再接生产域名。
+
+
+
 ## 环境变量
 
 | 变量 | 默认值 | 说明 |
