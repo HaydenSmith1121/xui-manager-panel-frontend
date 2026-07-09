@@ -41,6 +41,7 @@ const API_BASE_URL = (
   localStorage.getItem("XUI_MANAGER_API_BASE_URL") ||
   ""
 ).replace(/\/+$/, "");
+const SUBSCRIPTION_PROFILE_NAME = "黑心云";
 
 const UI_LANGUAGE = {
   zh: {
@@ -538,21 +539,30 @@ function subscriptionUrlForFormat(format) {
   return state.me?.subscription_url || urls.clash || "";
 }
 
+function buildClashInstallUrl(url) {
+  return (
+    "clash://install-config?url=" +
+    encodeURIComponent(url) +
+    "&name=" +
+    encodeURIComponent(SUBSCRIPTION_PROFILE_NAME)
+  );
+}
+
 const importClients = {
   "clash-verge": {
     format: "clash",
     label: "Clash Verge",
-    build: (url) => "clash://install-config?url=" + encodeURIComponent(url),
+    build: buildClashInstallUrl,
   },
   mihomo: {
     format: "clash",
     label: "Mihomo",
-    build: (url) => "clash://install-config?url=" + encodeURIComponent(url),
+    build: buildClashInstallUrl,
   },
   clash: {
     format: "clash",
     label: "Clash",
-    build: (url) => "clash://install-config?url=" + encodeURIComponent(url),
+    build: buildClashInstallUrl,
   },
   shadowrocket: {
     format: "base64",
