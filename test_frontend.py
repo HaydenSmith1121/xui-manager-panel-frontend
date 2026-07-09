@@ -65,6 +65,20 @@ class FrontendTests(unittest.TestCase):
         self.assertIn('html[data-theme="dark"] body.is-guest .compact-plan-card', app_css)
         self.assertIn('html[data-theme="dark"] body.is-guest .guest-section-heading h2', app_css)
 
+    def test_dark_guest_hero_visual_uses_dark_glass_cards(self):
+        app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
+        benefit_selector = 'html[data-theme="dark"] body.is-guest .hero-benefit-card'
+        benefit_start = app_css.index(benefit_selector)
+        benefit_block = app_css[benefit_start:app_css.index("}", benefit_start)]
+
+        self.assertIn('html[data-theme="dark"] body.is-guest .hero-visual-scene', app_css)
+        self.assertIn(benefit_selector, app_css)
+        self.assertNotIn("rgba(226, 238, 255, 0.92)", benefit_block)
+        self.assertIn("rgba(15, 29, 52, 0.88)", app_css)
+        self.assertIn("rgba(21, 48, 88, 0.72)", app_css)
+        self.assertIn("color: #eaf4ff !important", app_css)
+        self.assertIn('html[data-theme="dark"] body.is-guest .hero-client-orbit', app_css)
+
     def test_mobile_guest_flow_arrows_point_down(self):
         app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
 
