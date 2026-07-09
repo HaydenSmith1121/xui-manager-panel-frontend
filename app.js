@@ -37,6 +37,13 @@ const state = {
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
 
+function on(selector, event, handler, options) {
+  const element = $(selector);
+  if (!element) return null;
+  element.addEventListener(event, handler, options);
+  return element;
+}
+
 const API_BASE_URL = (
   window.XUI_MANAGER_API_BASE_URL ||
   localStorage.getItem("XUI_MANAGER_API_BASE_URL") ||
@@ -2029,14 +2036,14 @@ function bindEvents() {
   document.addEventListener("submit", (event) => {
     handleDynamicSubmit(event).catch((error) => showNotice(error?.message || "操作失败"));
   });
-  $("#authDialog").addEventListener("cancel", () => {
+  on("#authDialog", "cancel", () => {
     state.pendingPlanId = null;
   });
-  $("#mobileAccountBtn").addEventListener("click", () => {
+  on("#mobileAccountBtn", "click", () => {
     if (state.me) setView("profile");
     else openAuth("login");
   });
-  $("#logoutBtn").addEventListener("click", async () => {
+  on("#logoutBtn", "click", async () => {
     await api("/api/logout", { method: "POST", body: "{}" });
     state.me = null;
     state.users = [];
@@ -2061,29 +2068,30 @@ function bindEvents() {
     renderAuth();
     showNotice("已退出登录");
   });
-  $("#newPlanBtn").addEventListener("click", () => {
+  on("#newPlanBtn", "click", () => {
     resetPlanForm();
     $("#planDialog").showModal();
   });
-  $("#newPanelBtn").addEventListener("click", () => {
+  on("#newPanelBtn", "click", () => {
     resetPanelForm();
     $("#panelDialog").showModal();
   });
   ["userSearch", "userStatusFilter", "userRoleFilter", "priorityFilter"].forEach((id) => {
-    $("#" + id).addEventListener(id === "userSearch" ? "input" : "change", renderUsers);
+    on("#" + id, id === "userSearch" ? "input" : "change", renderUsers);
   });
-  $("#toggleUserListBtn").addEventListener("click", (event) => {
+  on("#toggleUserListBtn", "click", (event) => {
     const region = $("#userListRegion");
+    if (!region) return;
     const collapsed = region.classList.toggle("collapsed");
     event.currentTarget.textContent = collapsed ? "展开列表" : "折叠列表";
     event.currentTarget.setAttribute("aria-expanded", String(!collapsed));
   });
-  $("#syncUsageBtn").addEventListener("click", async () => {
+  on("#syncUsageBtn", "click", async () => {
     const result = await api("/api/admin/sync-usage", { method: "POST", body: "{}", loadingLabel: "正在同步 X-UI 用量" });
     await refreshAdmin();
     showNotice(`同步完成：更新 ${result.synced || 0} 条，停用 ${result.disabled || 0} 个客户端${result.errors?.length ? "，有错误请检查面板配置" : ""}`);
   });
-  $("#profilePasswordForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#profilePasswordForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = formData(form);
     if (data.new_password !== data.confirm_password) throw new Error("两次输入的新密码不一致");
     const result = await api("/api/me/password", { method: "POST", body: JSON.stringify(data), loadingLabel: "正在修改密码" });
@@ -2093,7 +2101,7 @@ function bindEvents() {
     showNotice("密码已修改");
   }));
 
-  $("#profileGiftCardForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#profileGiftCardForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/recharge", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在兑换礼品卡" });
     state.me = data.user;
     form.reset();
@@ -2102,7 +2110,7 @@ function bindEvents() {
     showNotice("礼品卡兑换成功，余额已到账");
   }));
 
-  $("#loginForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#loginForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/login", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在登录" });
     await finishAuthentication(data.user);
     showNotice("登录成功");
@@ -2121,7 +2129,7 @@ function bindEvents() {
     });
   });
 
-  $("#rechargeForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#rechargeForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/recharge", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在兑换充值卡" });
     state.me = data.user;
     form.reset();
@@ -2130,7 +2138,7 @@ function bindEvents() {
     showNotice("充值成功，余额已到账");
   }));
 
-  $("#rechargeCardForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#rechargeCardForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/admin/recharge-cards", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在生成充值卡" });
     const codes = (data.cards || []).map((card) => `${card.code}    ${formatMoney(card.amount_cents)}`);
     $("#generatedCardCodes").textContent = codes.join("\n");
@@ -2139,14 +2147,14 @@ function bindEvents() {
     showNotice(`已生成 ${codes.length} 张充值卡，请立即保存`);
   }));
 
-  $("#registerForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#registerForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/register", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在创建账号" });
     form.reset();
     await finishAuthentication(data.user);
     showNotice("账号创建成功");
   }));
 
-  $("#planForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#planForm", "submit", (event) => withSubmitState(event, async (form) => {
     const editing = form.dataset.mode === "edit";
     await api("/api/admin/plans", { method: "POST", body: JSON.stringify(formData(form)) });
     $("#planDialog").close();
@@ -2155,7 +2163,7 @@ function bindEvents() {
     showNotice(editing ? "套餐修改已保存" : "新套餐已添加");
   }));
 
-  $("#panelForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#panelForm", "submit", (event) => withSubmitState(event, async (form) => {
     const editing = form.dataset.mode === "edit";
     await api("/api/admin/panels", { method: "POST", body: JSON.stringify(formData(form)) });
     $("#panelDialog").close();
@@ -2164,28 +2172,28 @@ function bindEvents() {
     showNotice(editing ? "面板修改已保存" : "新面板已添加");
   }));
 
-  $("#nodeForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#nodeForm", "submit", (event) => withSubmitState(event, async (form) => {
     await api("/api/admin/nodes", { method: "POST", body: JSON.stringify(formData(form)) });
     resetNodeForm();
     await refreshAdmin();
     showNotice("节点已保存");
   }));
 
-  $("#settingsForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#settingsForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/admin/settings", { method: "POST", body: JSON.stringify(formData(form)) });
     state.settings = data.settings || {};
     renderSettings();
     showNotice("设置已保存");
   }));
 
-  $("#checkinSettingsForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#checkinSettingsForm", "submit", (event) => withSubmitState(event, async (form) => {
     const data = await api("/api/admin/checkin/settings", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在保存签到配置" });
     state.checkinSettings = data.settings || {};
     renderCheckinSettings();
     showNotice("签到配置已保存");
   }));
 
-  $("#tutorialForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#tutorialForm", "submit", (event) => withSubmitState(event, async (form) => {
     await api("/api/admin/tutorials", { method: "POST", body: JSON.stringify(formData(form)), loadingLabel: "正在保存教程" });
     resetTutorialForm();
     await refreshAdmin();
@@ -2193,7 +2201,7 @@ function bindEvents() {
     showNotice("教程已保存");
   }));
 
-  $("#usageForm").addEventListener("submit", (event) => withSubmitState(event, async (form) => {
+  on("#usageForm", "submit", (event) => withSubmitState(event, async (form) => {
     await api("/api/admin/usage", { method: "POST", body: JSON.stringify(formData(form)) });
     await refreshAdmin();
     showNotice("用量已保存");

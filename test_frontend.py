@@ -612,6 +612,18 @@ class FrontendTests(unittest.TestCase):
         self.assertNotIn("translateY(8px)", keyframes_block)
         self.assertNotIn("translateY(0)", keyframes_block)
 
+    def test_startup_event_bindings_tolerate_missing_optional_sections(self):
+        app_js = (Path(__file__).resolve().parents[0] / "app.js").read_text(encoding="utf-8")
+
+        bind_block = app_js[app_js.index("function bindEvents"):]
+        self.assertIn("function on(selector, event, handler, options)", app_js)
+        self.assertNotIn('$("#authDialog").addEventListener', bind_block)
+        self.assertNotIn('$("#mobileAccountBtn").addEventListener', bind_block)
+        self.assertNotIn('$("#loginForm").addEventListener', bind_block)
+        self.assertIn('on("#authDialog", "cancel"', app_js)
+        self.assertIn('on("#mobileAccountBtn", "click"', app_js)
+        self.assertIn('on("#loginForm", "submit"', app_js)
+
 
 if __name__ == "__main__":
     unittest.main()
