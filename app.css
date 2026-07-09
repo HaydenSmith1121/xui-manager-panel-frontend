@@ -1908,19 +1908,24 @@ dialog.dialog-fallback-open {
 }
 
 .password-field input {
-  padding-right: 68px;
+  padding-right: 52px;
 }
 
 .password-toggle {
   position: absolute;
   top: 50%;
   right: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
   min-height: 32px;
-  padding: 0 9px;
+  padding: 0;
   color: var(--blue-dark);
   background: transparent;
   box-shadow: none;
-  font-size: 11px;
+  font-size: 17px;
+  line-height: 1;
   transform: translateY(-50%);
 }
 

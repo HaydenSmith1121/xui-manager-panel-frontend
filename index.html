@@ -430,9 +430,9 @@
 
             <form id="profilePasswordForm" class="panel profile-panel password-panel">
               <div class="form-intro"><h2>安全设置</h2><p>修改当前登录密码。</p></div>
-              <label>当前密码<input name="current_password" type="password" autocomplete="current-password" required></label>
-              <label>新密码<input name="new_password" type="password" autocomplete="new-password" minlength="6" required></label>
-              <label>确认新密码<input name="confirm_password" type="password" autocomplete="new-password" minlength="6" required></label>
+              <label>当前密码<span class="password-field"><input name="current_password" type="password" autocomplete="current-password" required><button type="button" class="password-toggle" data-toggle-password aria-label="显示密码" title="显示密码">👁</button></span></label>
+              <label>新密码<span class="password-field"><input name="new_password" type="text" autocomplete="new-password" minlength="6" required><button type="button" class="password-toggle" data-toggle-password aria-label="隐藏密码" title="隐藏密码">👁</button></span></label>
+              <label>确认新密码<span class="password-field"><input name="confirm_password" type="password" autocomplete="new-password" minlength="6" required><button type="button" class="password-toggle" data-toggle-password aria-label="显示密码" title="显示密码">👁</button></span></label>
               <button type="submit">修改密码</button>
             </form>
 
@@ -635,13 +635,13 @@
         <p id="authError" class="auth-error hidden" role="alert" aria-live="assertive"></p>
         <form id="loginForm" class="auth-form" data-auth-panel="login">
           <label>邮箱<input name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label>
-          <label>密码<span class="password-field"><input name="password" type="password" autocomplete="current-password" required><button type="button" class="password-toggle" data-toggle-password>显示</button></span></label>
+          <label>密码<span class="password-field"><input name="password" type="password" autocomplete="current-password" required><button type="button" class="password-toggle" data-toggle-password aria-label="显示密码" title="显示密码">👁</button></span></label>
           <button type="submit" class="wide-button">登录并继续</button>
           <p class="auth-help-line"><button type="button" class="link-button" data-auth-tab="forgot">忘记密码</button></p>
         </form>
         <form id="registerForm" class="auth-form hidden" data-auth-panel="register">
           <label>邮箱<input name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label>
-          <label>密码<span class="password-field"><input name="password" type="password" autocomplete="new-password" minlength="6" required><button type="button" class="password-toggle" data-toggle-password>显示</button></span></label>
+          <label>密码<span class="password-field"><input name="password" type="password" autocomplete="new-password" minlength="6" required><button type="button" class="password-toggle" data-toggle-password aria-label="显示密码" title="显示密码">👁</button></span></label>
           <p class="form-note">密码至少 6 位。</p>
           <button type="submit" class="wide-button">创建账号并继续</button>
         </form>

@@ -1810,7 +1810,10 @@ async function handleDocumentClick(event) {
   if (passwordToggle) {
     const input = passwordToggle.parentElement.querySelector("input");
     input.type = input.type === "password" ? "text" : "password";
-    passwordToggle.textContent = input.type === "password" ? "显示" : "隐藏";
+    const isHidden = input.type === "password";
+    const label = isHidden ? "显示密码" : "隐藏密码";
+    passwordToggle.setAttribute("aria-label", label);
+    passwordToggle.setAttribute("title", label);
     return;
   }
   const guestScrollButton = target.closest("[data-scroll-guest]");
