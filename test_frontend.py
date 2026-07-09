@@ -184,6 +184,18 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("showNotice(message)", text)
         self.assertIn("event.preventDefault()", text)
 
+    def test_nginx_config_can_take_over_default_http_site(self):
+        root = Path(__file__).resolve().parents[0]
+        install_sh = (root / "deploy" / "install.sh").read_text(encoding="utf-8")
+        upgrade_sh = (root / "deploy" / "upgrade.sh").read_text(encoding="utf-8")
+
+        for script in (install_sh, upgrade_sh):
+            self.assertIn('FRONTEND_DEFAULT_SERVER="${FRONTEND_DEFAULT_SERVER:-1}"', script)
+            self.assertIn("DEFAULT_SERVER_SUFFIX", script)
+            self.assertIn('listen ${FRONTEND_LISTEN_PORT}${DEFAULT_SERVER_SUFFIX};', script)
+            self.assertIn("/etc/nginx/sites-enabled/default", script)
+            self.assertIn("default_server", script)
+
     def test_auth_form_errors_render_inside_auth_dialog(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")

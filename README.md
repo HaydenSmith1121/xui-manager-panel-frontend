@@ -101,6 +101,7 @@ window.XUI_MANAGER_API_BASE_URL = "";
 | `API_BASE_URL` | 空 | 写入 `config.js` 的后端地址；空表示同源请求 |
 | `ENABLE_BACKEND_PROXY` | `1` | 是否由 Nginx 代理 `/api/` 和 `/sub/` |
 | `BACKEND_UPSTREAM` | `http://127.0.0.1:25889` | 后端上游地址 |
+| `FRONTEND_DEFAULT_SERVER` | `1` | 是否让本前端站点成为 Nginx 默认站点，并移除系统默认站点链接 |
 | `NGINX_CONF` | `/etc/nginx/sites-available/xui-manager-panel-frontend.conf` | Nginx 配置文件路径 |
 | `NGINX_LINK` | `/etc/nginx/sites-enabled/xui-manager-panel-frontend.conf` | Nginx enabled 链接路径 |
 
@@ -135,6 +136,8 @@ curl -i http://127.0.0.1:25888/api/plans
 ~~~
 
 正常情况下，`25888` 应由 Nginx 监听，`25889` 应由后端服务监听；`/api/plans` 不应返回 502。
+
+如果部署到 80 端口后 `curl -I http://127.0.0.1/` 返回 Ubuntu 默认欢迎页，说明请求仍落到了系统默认站点。升级脚本默认会使用 `default_server` 并移除 `/etc/nginx/sites-enabled/default` 链接；如需保留系统默认站点，可设置 `FRONTEND_DEFAULT_SERVER=0`。
 
 ## 卸载
 

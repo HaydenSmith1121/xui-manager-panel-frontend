@@ -8,6 +8,7 @@ BRANCH="${BRANCH:-main}"
 API_BASE_URL="${API_BASE_URL:-}"
 NGINX_CONF="${NGINX_CONF:-/etc/nginx/sites-available/${APP_NAME}.conf}"
 NGINX_LINK="${NGINX_LINK:-/etc/nginx/sites-enabled/${APP_NAME}.conf}"
+FRONTEND_DEFAULT_SERVER="${FRONTEND_DEFAULT_SERVER:-1}"
 
 detect_nginx_listen_port() {
   [ -f "$1" ] || return 1
@@ -90,6 +91,11 @@ else
   ENABLE_BACKEND_PROXY="${ENABLE_BACKEND_PROXY:-1}"
 fi
 
+DEFAULT_SERVER_SUFFIX=""
+if [ "$FRONTEND_DEFAULT_SERVER" = "1" ]; then
+  DEFAULT_SERVER_SUFFIX=" default_server"
+fi
+
 if [ "$(id -u)" -ne 0 ]; then
   echo "Please run this installer as root."
   exit 1
@@ -118,7 +124,7 @@ mkdir -p "$(dirname "$NGINX_CONF")" "$(dirname "$NGINX_LINK")"
 if [ "$ENABLE_BACKEND_PROXY" = "1" ]; then
   cat > "$NGINX_CONF" <<EOF
 server {
-    listen ${FRONTEND_LISTEN_PORT};
+    listen ${FRONTEND_LISTEN_PORT}${DEFAULT_SERVER_SUFFIX};
     server_name ${FRONTEND_SERVER_NAME};
 
     root ${APP_DIR};
@@ -152,7 +158,7 @@ EOF
 else
   cat > "$NGINX_CONF" <<EOF
 server {
-    listen ${FRONTEND_LISTEN_PORT};
+    listen ${FRONTEND_LISTEN_PORT}${DEFAULT_SERVER_SUFFIX};
     server_name ${FRONTEND_SERVER_NAME};
 
     root ${APP_DIR};
@@ -166,6 +172,9 @@ EOF
 fi
 
 ln -sf "$NGINX_CONF" "$NGINX_LINK"
+if [ "$FRONTEND_DEFAULT_SERVER" = "1" ] && [ -L /etc/nginx/sites-enabled/default ]; then
+  rm -f /etc/nginx/sites-enabled/default
+fi
 nginx -t
 systemctl enable --now nginx
 systemctl reload nginx
