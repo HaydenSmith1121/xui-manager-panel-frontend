@@ -41,8 +41,6 @@ const API_BASE_URL = (
   localStorage.getItem("XUI_MANAGER_API_BASE_URL") ||
   ""
 ).replace(/\/+$/, "");
-const SUBSCRIPTION_PROFILE_NAME = "黑心云";
-
 const UI_LANGUAGE = {
   zh: {
     nav: {
@@ -497,6 +495,14 @@ function showNotice(message) {
   showNotice.timer = setTimeout(() => box.classList.add("hidden"), message.length > 60 ? 9000 : 3200);
 }
 
+function setAuthError(message = "") {
+  const box = $("#authError");
+  if (!box) return;
+  const text = String(message || "");
+  box.textContent = text;
+  box.classList.toggle("hidden", !text);
+}
+
 async function copyTextFromInput(input) {
   const value = input.value || "";
   if (!value) throw new Error("当前还没有可复制的订阅链接");
@@ -540,12 +546,7 @@ function subscriptionUrlForFormat(format) {
 }
 
 function buildClashInstallUrl(url) {
-  return (
-    "clash://install-config?url=" +
-    encodeURIComponent(url) +
-    "&name=" +
-    encodeURIComponent(SUBSCRIPTION_PROFILE_NAME)
-  );
+  return "clash://install-config?url=" + encodeURIComponent(url);
 }
 
 const importClients = {
@@ -661,6 +662,8 @@ async function withSubmitState(event, action) {
 
 async function withFormState(form, action) {
   if (form.dataset.submitting === "true") return;
+  const isAuthForm = form.closest("#authDialog");
+  if (isAuthForm) setAuthError("");
   const button = form.querySelector("button[type=submit]");
   const originalText = button?.textContent || "";
   form.dataset.submitting = "true";
@@ -671,7 +674,8 @@ async function withFormState(form, action) {
   try {
     await action(form);
   } catch (error) {
-    showNotice(error?.message || "操作失败");
+    if (isAuthForm) setAuthError(error?.message || "操作失败");
+    else showNotice(error?.message || "操作失败");
   } finally {
     delete form.dataset.submitting;
     if (button) {
@@ -1237,6 +1241,7 @@ function escapeHtml(value) {
 
 function showAuthTab(tab) {
   const normalizedTab = ["login", "register", "forgot"].includes(tab) ? tab : "login";
+  setAuthError("");
   const isForgot = normalizedTab === "forgot";
   const copy = {
     login: {
@@ -1310,6 +1315,7 @@ function openAuth(tab = "login") {
 function closeAuth(discardPending = false) {
   const dialog = $("#authDialog");
   closeModalDialog(dialog);
+  setAuthError("");
   if (discardPending) state.pendingPlanId = null;
   state.authReturnFocus?.focus?.();
   state.authReturnFocus = null;

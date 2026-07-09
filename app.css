@@ -1885,6 +1885,23 @@ dialog.dialog-fallback-open {
   display: grid;
 }
 
+.auth-error {
+  margin: -6px 0 16px;
+  border: 1px solid rgba(224, 84, 74, 0.32);
+  border-radius: 14px;
+  padding: 11px 13px;
+  color: #a33a2c;
+  background: #fff3f1;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.auth-error.hidden {
+  display: none;
+}
+
 .password-field {
   position: relative;
   display: block;
@@ -15153,6 +15170,13 @@ html[data-theme="dark"] .auth-brand h2 {
 html[data-theme="dark"] .auth-brand > p:last-child,
 html[data-theme="dark"] .auth-help-line {
   color: #9fb2ce !important;
+}
+
+html[data-theme="dark"] .auth-error {
+  border-color: rgba(248, 113, 113, 0.34) !important;
+  color: #fecaca !important;
+  background: rgba(127, 29, 29, 0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
 
 html[data-theme="dark"] .auth-tabs {

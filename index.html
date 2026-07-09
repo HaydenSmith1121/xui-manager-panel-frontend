@@ -655,6 +655,7 @@
           <button type="button" class="active" role="tab" aria-selected="true" data-auth-tab="login">登录</button>
           <button type="button" role="tab" aria-selected="false" data-auth-tab="register">注册</button>
         </div>
+        <p id="authError" class="auth-error hidden" role="alert" aria-live="assertive"></p>
         <form id="loginForm" class="auth-form" data-auth-panel="login">
           <label>邮箱<input name="email" type="email" autocomplete="email" placeholder="name@example.com" required></label>
           <label>密码<span class="password-field"><input name="password" type="password" autocomplete="current-password" required><button type="button" class="password-toggle" data-toggle-password>显示</button></span></label>

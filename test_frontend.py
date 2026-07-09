@@ -184,6 +184,21 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("showNotice(message)", text)
         self.assertIn("event.preventDefault()", text)
 
+    def test_auth_form_errors_render_inside_auth_dialog(self):
+        root = Path(__file__).resolve().parents[0]
+        app_js = (root / "app.js").read_text(encoding="utf-8")
+        app_css = (root / "app.css").read_text(encoding="utf-8")
+        index_html = (root / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn('id="authError"', index_html)
+        self.assertIn('role="alert"', index_html)
+        self.assertIn("function setAuthError", app_js)
+        self.assertIn('const isAuthForm = form.closest("#authDialog")', app_js)
+        self.assertIn('setAuthError(error?.message || "操作失败")', app_js)
+        self.assertIn('setAuthError("")', app_js)
+        self.assertIn(".auth-error", app_css)
+        self.assertIn('html[data-theme="dark"] .auth-error', app_css)
+
     def test_save_feedback_stays_visible_and_forms_lock_while_submitting(self):
         root = Path(__file__).resolve().parents[0]
         app_js = (root / "app.js").read_text(encoding="utf-8")
@@ -345,6 +360,8 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("async function launchImport", app_js)
         self.assertIn("encodeURIComponent", app_js)
         self.assertIn("clash://install-config?url=", app_js)
+        self.assertIn('return "clash://install-config?url=" + encodeURIComponent(url);', app_js)
+        self.assertNotIn('"&name=" +', app_js)
         self.assertIn("shadowrocket://", app_js)
         self.assertIn("data-import-client", app_js)
         self.assertIn("window.location.href", app_js)
