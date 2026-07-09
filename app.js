@@ -892,6 +892,33 @@ async function refreshAdminTickets() {
   renderAdminTickets();
 }
 
+async function deleteUserTicket(ticketId) {
+  if (!ticketId) return;
+  if (!window.confirm("确定删除这个工单吗？删除后不可恢复。")) return;
+  await api("/api/tickets/delete", {
+    method: "POST",
+    body: JSON.stringify({ ticket_id: Number(ticketId) }),
+    loadingLabel: "正在删除工单",
+  });
+  if (String(state.activeTicketId) === String(ticketId)) state.activeTicketId = null;
+  state.isCreatingTicket = false;
+  await refreshTickets();
+  showNotice("工单已删除");
+}
+
+async function deleteAdminTicket(ticketId) {
+  if (!ticketId) return;
+  if (!window.confirm("确定删除这个工单吗？删除后不可恢复。")) return;
+  await api("/api/admin/tickets/delete", {
+    method: "POST",
+    body: JSON.stringify({ ticket_id: Number(ticketId) }),
+    loadingLabel: "正在删除工单",
+  });
+  if (String(state.activeAdminTicketId) === String(ticketId)) state.activeAdminTicketId = null;
+  await refreshAdminTickets();
+  showNotice("工单已删除");
+}
+
 async function refreshBalanceTransactions() {
   const data = await api("/api/balance/transactions", { silent: true });
   state.transactions = data.transactions || [];
@@ -1534,6 +1561,12 @@ function renderTickets() {
   const target = $("#ticketList");
   if (!target) return;
   $("#ticketsView")?.classList.remove("ticket-admin-mode");
+  const newTicketButton = $("#newTicketBtn");
+  if (newTicketButton) {
+    newTicketButton.textContent = state.isCreatingTicket ? "收起新建" : "新建工单";
+    newTicketButton.classList.toggle("active", state.isCreatingTicket);
+    newTicketButton.setAttribute("aria-expanded", state.isCreatingTicket ? "true" : "false");
+  }
   if (state.me?.role !== "user") {
     target.innerHTML = '<span class="meta">暂无工单</span>';
     renderTicketConversationPane(null, "user");
@@ -1588,9 +1621,11 @@ function renderAdminTickets() {
 function ticketThreadButtonHtml(ticket, activeTicket, isAdmin) {
   const active = activeTicket && String(ticket.id) === String(activeTicket.id);
   const selector = isAdmin ? 'data-select-admin-ticket="' + ticket.id + '"' : 'data-select-user-ticket="' + ticket.id + '"';
+  const deleteSelector = isAdmin ? 'data-delete-admin-ticket="' + ticket.id + '"' : 'data-delete-user-ticket="' + ticket.id + '"';
   const subject = '#' + ticket.id + ' ' + escapeHtml(ticket.subject || "未命名工单");
   const sender = isAdmin ? escapeHtml(ticket.user_email || "未知用户") : '我提交的工单';
-  return '<button type="button" class="admin-ticket-person ticket-thread-item ' + (active ? "active" : "") + '" ' + selector + '><span class="admin-ticket-avatar">' + adminTicketInitial(ticket) + '</span><span class="admin-ticket-person-main"><strong>' + subject + '</strong><small>' + sender + '</small><em>回复 ' + (ticket.reply_count || (ticket.replies || []).length || 0) + ' · ' + toDateTime(ticket.updated_at || ticket.created_at) + '</em></span><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></button>';
+  const deleteLabel = isAdmin ? "删除工单" : "删除我的工单";
+  return '<div class="ticket-thread-row ' + (active ? "active" : "") + '"><button type="button" class="admin-ticket-person ticket-thread-item ' + (active ? "active" : "") + '" ' + selector + '><span class="admin-ticket-avatar">' + adminTicketInitial(ticket) + '</span><span class="admin-ticket-person-main"><strong>' + subject + '</strong><small>' + sender + '</small><em>回复 ' + (ticket.reply_count || (ticket.replies || []).length || 0) + ' · ' + toDateTime(ticket.updated_at || ticket.created_at) + '</em></span><span class="status ' + escapeHtml(ticket.status) + '">' + ticketStatusText(ticket.status) + '</span></button><button type="button" class="ticket-delete-button" ' + deleteSelector + ' aria-label="' + deleteLabel + '">删除</button></div>';
 }
 
 function updateTicketStats(tickets) {
@@ -1603,7 +1638,7 @@ function updateTicketStats(tickets) {
 }
 
 function ticketCreateFormHtml() {
-  return '<form id="ticketForm" class="ticket-compose-card ticket-conversation-form"><div class="ticket-panel-title"><h2>新建工单</h2><p>把节点名、设备和报错写清楚，处理会更快。</p></div><label>标题<input name="subject" maxlength="120" placeholder="例如：香港 A 节点不可用" required></label><label>问题描述<textarea name="message" rows="7" maxlength="2000" placeholder="请尽量提供客户端、节点名、报错截图文字等信息" required></textarea></label><button type="submit">提交工单</button></form>';
+  return '<form id="ticketForm" class="ticket-compose-card ticket-conversation-form"><div class="ticket-panel-title"><h2>新建工单</h2><p>把节点名、设备和报错写清楚，处理会更快。</p></div><label>标题<input name="subject" maxlength="120" placeholder="例如：香港 A 节点不可用" required></label><label>问题描述<textarea name="message" rows="10" maxlength="2000" placeholder="请尽量提供客户端、节点名、报错截图文字等信息" required></textarea></label><button type="submit">提交工单</button></form>';
 }
 
 function renderTicketConversationPane(ticket, mode) {
@@ -1712,6 +1747,16 @@ async function handleDocumentClick(event) {
     toggleLanguage();
     return;
   }
+  const deleteAdminTicketButton = target.closest("[data-delete-admin-ticket]");
+  if (deleteAdminTicketButton) {
+    await deleteAdminTicket(deleteAdminTicketButton.dataset.deleteAdminTicket);
+    return;
+  }
+  const deleteUserTicketButton = target.closest("[data-delete-user-ticket]");
+  if (deleteUserTicketButton) {
+    await deleteUserTicket(deleteUserTicketButton.dataset.deleteUserTicket);
+    return;
+  }
   const adminTicketButton = target.closest("[data-select-admin-ticket]");
   if (adminTicketButton) {
     state.activeAdminTicketId = adminTicketButton.dataset.selectAdminTicket;
@@ -1719,8 +1764,9 @@ async function handleDocumentClick(event) {
     return;
   }
   if (target.closest("[data-new-ticket]")) {
-    state.activeTicketId = null;
-    state.isCreatingTicket = true;
+    state.isCreatingTicket = !state.isCreatingTicket;
+    if (state.isCreatingTicket) state.activeTicketId = null;
+    else if (!state.activeTicketId && state.tickets[0]) state.activeTicketId = state.tickets[0].id;
     renderTickets();
     return;
   }
