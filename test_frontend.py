@@ -383,18 +383,22 @@ class FrontendTests(unittest.TestCase):
             'id="profileGiftCardForm"',
             'id="profileGiftCardBalance"',
             'id="profilePasswordForm"',
-            'id="profileSubscriptionUrl"',
             'class="profile-list"',
             "礼品卡兑换",
-            "复制订阅链接",
         ):
             self.assertIn(marker, index_html)
         profile_start = index_html.index('id="profileView"')
         profile_block = index_html[profile_start:index_html.index('id="adminView"', profile_start)]
         self.assertNotIn('id="checkinPanel"', profile_block)
         self.assertNotIn('自动续费', profile_block)
+        self.assertNotIn('订阅信息', profile_block)
+        self.assertNotIn('id="profileSubscriptionInfo"', profile_block)
+        self.assertNotIn('id="profileSubscriptionUrl"', profile_block)
+        self.assertNotIn('data-copy-profile-sub', profile_block)
         self.assertIn("renderProfile", app_js)
-        self.assertIn("data-copy-profile-sub", app_js)
+        self.assertNotIn("data-copy-profile-sub", app_js)
+        self.assertNotIn("#profileSubscriptionUrl", app_js)
+        self.assertNotIn("profileSubStatus", app_js)
         self.assertIn("/api/me/password", app_js)
         self.assertIn("礼品卡兑换成功，余额已到账", app_js)
         self.assertIn("profileEntryLabel", app_js)

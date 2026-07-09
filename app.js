@@ -620,7 +620,7 @@ async function copySubscriptionUrl(url) {
     await navigator.clipboard.writeText(url);
     return;
   }
-  const helper = $("#subscriptionUrl") || $("#profileSubscriptionUrl");
+  const helper = $("#subscriptionUrl");
   if (!helper) throw new Error("复制失败，请手动复制订阅链接");
   const previous = helper.value;
   helper.value = url;
@@ -979,18 +979,6 @@ function renderProfile() {
   $("#profileGiftCardBalance").textContent = loggedIn ? formatMoney(state.me.balance_cents) : "¥0.00";
   $("#expireReminderToggle").checked = Boolean(state.profilePrefs.expireReminder);
   $("#trafficReminderToggle").checked = Boolean(state.profilePrefs.trafficReminder);
-  const subscriptionUrl = subscriptionUrlForFormat("clash");
-  const plan = state.plans.find((item) => Number(item.id) === Number(state.me?.plan_id));
-  $("#profileSubscriptionInfo").textContent = loggedIn
-    ? `${planDisplayName(plan)} · ${formatBytes(state.me.quota_bytes)} 总量`
-    : "登录后展示订阅信息。";
-  $("#profileSubStatus").textContent = loggedIn ? statusText(state.me.status) : "-";
-  $("#profileSubExpire").textContent = loggedIn ? toDate(state.me.expire_at) : "-";
-  $("#profileSubRemain").textContent = loggedIn ? formatBytes(state.me.remaining_bytes) : "-";
-  $("#profileSubscriptionUrl").value = subscriptionUrl;
-  $$("[data-copy-profile-sub]").forEach((button) => {
-    button.disabled = !subscriptionUrl || state.me?.status !== "active";
-  });
   renderImportButtons();
   renderCheckin();
   setAvatarNode($("#profileEntryAvatar"));
@@ -1870,12 +1858,6 @@ async function handleDocumentClick(event) {
     showNotice("订阅链接已复制");
     return;
   }
-  if (target.closest("[data-copy-profile-sub]")) {
-    await copyTextFromInput($("#profileSubscriptionUrl"));
-    showNotice("订阅链接已复制");
-    return;
-  }
-
   const closeDialog = target.closest("[data-close-dialog]");
   if (closeDialog) {
     $("#" + closeDialog.dataset.closeDialog)?.close();

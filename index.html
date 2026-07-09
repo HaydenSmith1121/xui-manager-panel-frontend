@@ -342,6 +342,21 @@
                   <label data-device-copy-panel="windows macos ios android"><span>sing-box</span><small>多平台备用</small><span class="copy-field"><input id="singboxSubscriptionUrl" data-sub-format="singbox" readonly><button type="button" data-copy-sub="singbox">复制</button></span></label>
                 </div>
               </section>
+              <section class="client-import-panel" aria-labelledby="accountImportTitle">
+                <div class="client-import-copy">
+                  <h3 id="accountImportTitle">一键导入</h3>
+                  <p>从我的订阅页直接把当前订阅交给常用客户端。</p>
+                </div>
+                <div class="client-import-grid">
+                  <button type="button" class="client-import-button" data-import-client="clash-verge"><span>Clash Verge</span><small>Windows 推荐</small></button>
+                  <button type="button" class="client-import-button" data-import-client="mihomo"><span>Mihomo Party</span><small>Windows / macOS</small></button>
+                  <button type="button" class="client-import-button" data-import-client="clash"><span>Clash</span><small>旧版兼容</small></button>
+                  <button type="button" class="client-import-button" data-import-client="shadowrocket"><span>Shadowrocket</span><small>iOS</small></button>
+                  <button type="button" class="client-import-button" data-import-client="singbox"><span>sing-box</span><small>通用内核</small></button>
+                  <button type="button" class="client-import-button" data-import-client="v2rayng"><span>V2RayNG</span><small>Android</small></button>
+                  <button type="button" class="client-import-button" data-import-client="hiddify"><span>Hiddify</span><small>多平台</small></button>
+                </div>
+              </section>
             </div>
           </div>
         </section>
@@ -421,29 +436,6 @@
               <button type="submit">修改密码</button>
             </form>
 
-            <details class="panel profile-panel subscription-profile-panel">
-              <summary><span>订阅信息</span><small id="profileSubscriptionInfo">订阅信息会在开通后显示</small></summary>
-              <div class="profile-subscription-stats">
-                <span><small>状态</small><strong id="profileSubStatus">-</strong></span>
-                <span><small>到期时间</small><strong id="profileSubExpire">-</strong></span>
-                <span><small>剩余流量</small><strong id="profileSubRemain">-</strong></span>
-              </div>
-              <label class="subscription-display">订阅链接展示
-                <span class="copy-field"><input id="profileSubscriptionUrl" readonly><button type="button" data-copy-profile-sub>复制订阅链接</button></span>
-              </label>
-              <div class="client-import-panel compact">
-                <div class="client-import-copy"><h3>一键导入</h3><p>从个人中心直接把当前订阅交给常用客户端。</p></div>
-                <div class="client-import-grid">
-                  <button type="button" class="client-import-button" data-import-client="clash-verge"><span>Clash Verge</span><small>推荐</small></button>
-                  <button type="button" class="client-import-button" data-import-client="mihomo"><span>Mihomo</span><small>Clash Meta</small></button>
-                  <button type="button" class="client-import-button" data-import-client="clash"><span>Clash</span><small>通用</small></button>
-                  <button type="button" class="client-import-button" data-import-client="shadowrocket"><span>Shadowrocket</span><small>iOS</small></button>
-                  <button type="button" class="client-import-button" data-import-client="singbox"><span>sing-box</span><small>多平台</small></button>
-                  <button type="button" class="client-import-button" data-import-client="v2rayng"><span>v2rayNG</span><small>Android</small></button>
-                  <button type="button" class="client-import-button" data-import-client="hiddify"><span>Hiddify</span><small>通用</small></button>
-                </div>
-              </div>
-            </details>
           </div>
         </section>
 
