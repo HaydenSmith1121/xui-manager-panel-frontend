@@ -15431,3 +15431,140 @@ html[data-theme="dark"] body.is-authed #nodeStatusView [data-refresh-node-status
   color: #bfdbfe !important;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24) !important;
 }
+
+/* Dark mode contrast repair: authenticated pages and guest hero chips. */
+html[data-theme="dark"] body.is-authed {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(37, 99, 235, 0.22), transparent 32%),
+    radial-gradient(circle at 84% 18%, rgba(14, 165, 233, 0.12), transparent 34%),
+    linear-gradient(180deg, #08111f 0%, #0b1626 52%, #07101d 100%) !important;
+  color: #eaf2ff !important;
+}
+
+html[data-theme="dark"] body.is-authed .app-shell,
+html[data-theme="dark"] body.is-authed .app-main,
+html[data-theme="dark"] body.is-authed .view,
+html[data-theme="dark"] body.is-authed #storefrontView,
+html[data-theme="dark"] body.is-authed #accountView,
+html[data-theme="dark"] body.is-authed #balanceView,
+html[data-theme="dark"] body.is-authed #nodeStatusView,
+html[data-theme="dark"] body.is-authed #guideView {
+  background:
+    radial-gradient(circle at 18% 2%, rgba(37, 99, 235, 0.22), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(45, 212, 191, 0.1), transparent 32%),
+    #08111f !important;
+  color: #eaf2ff !important;
+}
+
+html[data-theme="dark"] body.is-authed .page-heading h1,
+html[data-theme="dark"] body.is-authed .section-heading h2,
+html[data-theme="dark"] body.is-authed #plansTitle,
+html[data-theme="dark"] body.is-authed .account-hero-panel h1,
+html[data-theme="dark"] body.is-authed .balance-hero-panel h1,
+html[data-theme="dark"] body.is-authed .plan-card h3,
+html[data-theme="dark"] body.is-authed .compact-plan-card h3,
+html[data-theme="dark"] body.is-authed .subscription-status-card h2,
+html[data-theme="dark"] body.is-authed .subscription-status-card strong,
+html[data-theme="dark"] body.is-authed .client-import-button span,
+html[data-theme="dark"] body.is-authed .transaction-row strong,
+html[data-theme="dark"] body.is-authed .node-status-row strong,
+html[data-theme="dark"] body.is-authed .node-status-table th,
+html[data-theme="dark"] body.is-authed .node-status-table strong {
+  color: #f8fbff !important;
+  text-shadow: none !important;
+}
+
+html[data-theme="dark"] body.is-authed .page-heading p,
+html[data-theme="dark"] body.is-authed .section-heading p,
+html[data-theme="dark"] body.is-authed .account-hero-panel p,
+html[data-theme="dark"] body.is-authed .balance-hero-panel p,
+html[data-theme="dark"] body.is-authed .plan-description,
+html[data-theme="dark"] body.is-authed .subscription-status-card span,
+html[data-theme="dark"] body.is-authed .subscription-status-card small,
+html[data-theme="dark"] body.is-authed .client-import-copy p,
+html[data-theme="dark"] body.is-authed .client-import-button small,
+html[data-theme="dark"] body.is-authed .transaction-row span,
+html[data-theme="dark"] body.is-authed .node-status-row span,
+html[data-theme="dark"] body.is-authed .node-status-table td,
+html[data-theme="dark"] body.is-authed .tutorial-card p {
+  color: #a9bad4 !important;
+}
+
+html[data-theme="dark"] body.is-authed .plan-card,
+html[data-theme="dark"] body.is-authed .compact-plan-card,
+html[data-theme="dark"] body.is-authed .subscription-status-card,
+html[data-theme="dark"] body.is-authed .my-plan-card,
+html[data-theme="dark"] body.is-authed .client-import-panel,
+html[data-theme="dark"] body.is-authed .recharge-panel,
+html[data-theme="dark"] body.is-authed .balance-history-panel,
+html[data-theme="dark"] body.is-authed .transaction-list,
+html[data-theme="dark"] body.is-authed .transaction-row,
+html[data-theme="dark"] body.is-authed .node-status-table,
+html[data-theme="dark"] body.is-authed .node-status-card,
+html[data-theme="dark"] body.is-authed .tutorial-card,
+html[data-theme="dark"] body.is-authed .panel,
+html[data-theme="dark"] body.is-authed .list-panel,
+html[data-theme="dark"] body.is-authed .row-card,
+html[data-theme="dark"] body.is-authed .profile-card,
+html[data-theme="dark"] body.is-authed .account-hero-panel,
+html[data-theme="dark"] body.is-authed .balance-hero-panel {
+  background: linear-gradient(180deg, rgba(17, 29, 49, 0.96), rgba(10, 20, 36, 0.94)) !important;
+  border-color: rgba(99, 144, 210, 0.34) !important;
+  color: #eaf2ff !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32) !important;
+}
+
+html[data-theme="dark"] body.is-authed input,
+html[data-theme="dark"] body.is-authed textarea,
+html[data-theme="dark"] body.is-authed select,
+html[data-theme="dark"] body.is-authed .subscription-url,
+html[data-theme="dark"] body.is-authed .client-import-button,
+html[data-theme="dark"] body.is-authed .plan-meta span,
+html[data-theme="dark"] body.is-authed .plan-facts span,
+html[data-theme="dark"] body.is-authed .node-status-summary-card,
+html[data-theme="dark"] body.is-authed .node-status-stat,
+html[data-theme="dark"] body.is-authed .status-pill,
+html[data-theme="dark"] body.is-authed .profile-entry {
+  background: rgba(8, 17, 31, 0.72) !important;
+  border-color: rgba(148, 163, 184, 0.26) !important;
+  color: #dbeafe !important;
+}
+
+html[data-theme="dark"] body.is-authed .client-import-button:hover:not(:disabled),
+html[data-theme="dark"] body.is-authed .client-import-button:focus-visible,
+html[data-theme="dark"] body.is-authed .plan-meta span:hover,
+html[data-theme="dark"] body.is-authed .plan-facts span:hover {
+  background: rgba(37, 99, 235, 0.24) !important;
+  border-color: rgba(125, 211, 252, 0.36) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] body.is-authed .node-status-table thead,
+html[data-theme="dark"] body.is-authed .node-status-table tr,
+html[data-theme="dark"] body.is-authed .node-status-table td,
+html[data-theme="dark"] body.is-authed .node-status-table th {
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+html[data-theme="dark"] body.is-authed .node-status-table thead,
+html[data-theme="dark"] body.is-authed .node-status-table th {
+  background: rgba(15, 23, 42, 0.82) !important;
+}
+
+html[data-theme="dark"] body.is-guest .guest-hero .hero-benefit-card,
+html[data-theme="dark"] body.is-guest .hero-visual-scene .hero-benefit-card {
+  background: linear-gradient(135deg, rgba(15, 29, 52, 0.96), rgba(21, 48, 88, 0.86)) !important;
+  border-color: rgba(125, 211, 252, 0.36) !important;
+  color: #f8fbff !important;
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+html[data-theme="dark"] body.is-guest .guest-hero .hero-benefit-card strong,
+html[data-theme="dark"] body.is-guest .hero-visual-scene .hero-benefit-card strong {
+  color: #f8fbff !important;
+}
+
+html[data-theme="dark"] body.is-guest .guest-hero .hero-benefit-card small,
+html[data-theme="dark"] body.is-guest .hero-visual-scene .hero-benefit-card small {
+  color: #a5f3fc !important;
+}

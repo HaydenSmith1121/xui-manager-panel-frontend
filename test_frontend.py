@@ -622,6 +622,23 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("body.is-authed #guideView #publicTutorialList.tutorial-list", app_css)
         self.assertIn("body.is-authed #nodeStatusView #nodeStatusList", app_css)
 
+    def test_dark_mode_contrast_repairs_user_pages(self):
+        app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
+
+        self.assertIn("Dark mode contrast repair", app_css)
+        for selector in [
+            'html[data-theme="dark"] body.is-authed #storefrontView',
+            'html[data-theme="dark"] body.is-authed .plan-card',
+            'html[data-theme="dark"] body.is-authed .subscription-status-card',
+            'html[data-theme="dark"] body.is-authed .client-import-button',
+            'html[data-theme="dark"] body.is-authed .transaction-row',
+            'html[data-theme="dark"] body.is-authed .node-status-table',
+            'html[data-theme="dark"] body.is-guest .guest-hero .hero-benefit-card',
+        ]:
+            self.assertIn(selector, app_css)
+        self.assertIn("color: #f8fbff !important", app_css)
+        self.assertIn("background: linear-gradient(180deg, rgba(17, 29, 49", app_css)
+
     def test_menu_view_switches_use_no_position_animation(self):
         root = Path(__file__).resolve().parents[0]
         app_css = (root / "app.css").read_text(encoding="utf-8")
