@@ -643,6 +643,16 @@ class FrontendTests(unittest.TestCase):
         self.assertIn("--dark-muted: #94a3b8", app_css)
         self.assertIn("background: var(--dark-panel) !important", app_css)
         self.assertIn("box-shadow: none !important", app_css)
+        self.assertIn("Dark mode hard reset: remove leftover light surfaces outside ticket help", app_css)
+        for selector in [
+            'html[data-theme="dark"] body.is-authed .main-shell',
+            'html[data-theme="dark"] body.is-authed #profileView.profile-workspace',
+            'html[data-theme="dark"] body.is-authed .balance-grid',
+            'html[data-theme="dark"] body.is-authed .subscription-formats label',
+            'html[data-theme="dark"] body.is-authed .subscription-status-stats > div',
+            'html[data-theme="dark"] body.is-authed .node-status-table tr',
+        ]:
+            self.assertIn(selector, app_css)
 
     def test_menu_view_switches_use_no_position_animation(self):
         root = Path(__file__).resolve().parents[0]
