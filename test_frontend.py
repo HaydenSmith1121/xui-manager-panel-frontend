@@ -626,6 +626,7 @@ class FrontendTests(unittest.TestCase):
         app_css = (Path(__file__).resolve().parents[0] / "app.css").read_text(encoding="utf-8")
 
         self.assertIn("Dark mode contrast repair", app_css)
+        self.assertIn("Dark mode palette alignment: match the ticket help workbench", app_css)
         for selector in [
             'html[data-theme="dark"] body.is-authed #storefrontView',
             'html[data-theme="dark"] body.is-authed .plan-card',
@@ -636,8 +637,12 @@ class FrontendTests(unittest.TestCase):
             'html[data-theme="dark"] body.is-guest .guest-hero .hero-benefit-card',
         ]:
             self.assertIn(selector, app_css)
-        self.assertIn("color: #f8fbff !important", app_css)
-        self.assertIn("background: linear-gradient(180deg, rgba(17, 29, 49", app_css)
+        self.assertIn("--dark-page: #08111f", app_css)
+        self.assertIn("--dark-panel: rgba(15, 23, 42, 0.9)", app_css)
+        self.assertIn("--dark-row: rgba(30, 41, 59, 0.84)", app_css)
+        self.assertIn("--dark-muted: #94a3b8", app_css)
+        self.assertIn("background: var(--dark-panel) !important", app_css)
+        self.assertIn("box-shadow: none !important", app_css)
 
     def test_menu_view_switches_use_no_position_animation(self):
         root = Path(__file__).resolve().parents[0]
