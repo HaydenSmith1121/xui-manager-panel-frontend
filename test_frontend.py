@@ -194,6 +194,8 @@ class FrontendTests(unittest.TestCase):
             self.assertIn("DEFAULT_SERVER_SUFFIX", script)
             self.assertIn('listen ${FRONTEND_LISTEN_PORT}${DEFAULT_SERVER_SUFFIX};', script)
             self.assertIn("/etc/nginx/sites-enabled/default", script)
+            self.assertIn("rm -f /etc/nginx/sites-enabled/default", script)
+            self.assertNotIn("-L /etc/nginx/sites-enabled/default", script)
             self.assertIn("default_server", script)
 
     def test_auth_form_errors_render_inside_auth_dialog(self):

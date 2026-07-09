@@ -172,7 +172,10 @@ EOF
 fi
 
 ln -sf "$NGINX_CONF" "$NGINX_LINK"
-if [ "$FRONTEND_DEFAULT_SERVER" = "1" ] && [ -L /etc/nginx/sites-enabled/default ]; then
+if [ "$FRONTEND_DEFAULT_SERVER" = "1" ]; then
+  # Fully hand the HTTP default site to this panel. Some Ubuntu images keep the
+  # welcome page as a regular enabled file instead of a symlink, so remove either
+  # form before nginx is reloaded.
   rm -f /etc/nginx/sites-enabled/default
 fi
 nginx -t
